@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #root { min-height: 100%; }
+body { @apply bg-surface text-navy antialiased; font-family: Inter, 'Noto Sans Devanagari', system-ui, sans-serif; }
+:lang(hi) body { line-height: 1.6; }
+input[type='number']::-webkit-inner-spin-button { opacity: 0.4; }
+.tabular-nums { font-variant-numeric: tabular-nums; }
+
+@media print {
+  .no-print { display: none !important; }
+  body { background: white; }
+  .print-page { box-shadow: none !important; margin: 0 !important; max-width: none !important; }
+}
+
+.leaflet-container { font-family: inherit; }
