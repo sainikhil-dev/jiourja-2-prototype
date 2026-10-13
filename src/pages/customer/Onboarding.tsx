@@ -109,7 +109,7 @@ export default function Onboarding() {
       }
     } else setErrors({});
     update((d) => ({ ...d, step: n }));
-    topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    topRef.current?.scrollIntoView?.({ behavior: 'smooth', block: 'start' });
   };
 
   const loadSample = () => {

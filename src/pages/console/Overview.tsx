@@ -75,7 +75,7 @@ export default function Overview() {
                 <XAxis type="number" allowDecimals={false} fontSize={11} />
                 <YAxis type="category" dataKey="stage" width={130} fontSize={11} />
                 <Tooltip />
-                <Bar dataKey="count" fill="#087AD1" radius={[0, 4, 4, 0]} />
+                <Bar isAnimationActive={false} dataKey="count" fill="#087AD1" radius={[0, 4, 4, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

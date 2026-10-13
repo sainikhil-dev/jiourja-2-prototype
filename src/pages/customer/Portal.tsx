@@ -29,9 +29,10 @@ export default function Portal() {
 }
 
 function SwitchAccountLink() {
+  const { t } = useI18n();
   return (
     <LinkButton to="/my/accounts" variant="ghost" size="sm" icon={<Repeat className="h-4 w-4" />}>
-      Switch demo customer
+      {t('Switch demo customer')}
     </LinkButton>
   );
 }
@@ -239,7 +240,7 @@ function ActiveDashboard({ c }: { c: Customer }) {
             </div>
           )}
           <div className="grid gap-3 sm:grid-cols-3">
-            <Stat label={`${t('Estimated savings this month')} (${last ? monthLabel(last.month) : '—'})`} tone="teal" value={inr(roundFriendly(last?.netSavingsInr ?? 0))} hint="after JioUrja payments" />
+            <Stat label={`${t('Estimated savings this month')} (${last ? monthLabel(last.month) : '—'})`} tone="teal" value={inr(roundFriendly(last?.netSavingsInr ?? 0))} hint={inst.planType === 'ppa' ? 'after JioUrja payments' : 'after EMI and maintenance'} />
             <Stat label={t('Solar units generated')} value={`${num(last?.solarKwh)} units`} hint={last ? monthLabel(last.month) : ''} />
             <Stat label={t('System status')} value={tel.status === 'ok' ? 'Working' : 'Needs attention'} hint={`${num(last?.availabilityPct, 1)}% available`} tone={tel.status === 'ok' ? 'teal' : 'amber'} />
           </div>
@@ -278,9 +279,9 @@ function ActiveDashboard({ c }: { c: Customer }) {
                   <YAxis fontSize={11} tickFormatter={(v) => `₹${Math.round(v / 1000)}k`} width={48} />
                   <Tooltip formatter={(v: number) => inr(v)} />
                   <Legend wrapperStyle={{ fontSize: 12 }} />
-                  <Bar dataKey="Bill avoided" fill="#087AD1" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey={inst.planType === 'ppa' ? 'JioUrja payment' : 'EMI + maintenance'} fill="#F1B650" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="Net savings" fill="#12B8A6" radius={[4, 4, 0, 0]} />
+                  <Bar isAnimationActive={false} dataKey="Bill avoided" fill="#087AD1" radius={[4, 4, 0, 0]} />
+                  <Bar isAnimationActive={false} dataKey={inst.planType === 'ppa' ? 'JioUrja payment' : 'EMI + maintenance'} fill="#F1B650" radius={[4, 4, 0, 0]} />
+                  <Bar isAnimationActive={false} dataKey="Net savings" fill="#12B8A6" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>

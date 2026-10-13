@@ -51,20 +51,20 @@ export default function Results() {
       </div>
 
       <Card className="space-y-2">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">Your electricity today</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">{t('Your electricity today')}</h2>
         <div className="flex flex-wrap gap-x-8 gap-y-2">
           <div>
             <div className="text-2xl font-bold">{inr(c.bill.monthlyBillInr ?? r.baselineMonthlyBillInr)}</div>
-            <div className="text-xs text-slate-500">monthly bill {c.bill.source === 'customer_entered' ? '(as you told us)' : '(sample)'}</div>
+            <div className="text-xs text-slate-500">{t('monthly bill')} {c.bill.source === 'customer_entered' ? '(as you told us)' : '(sample)'}</div>
           </div>
           <div>
-            <div className="text-2xl font-bold">about {num(units / 12)}</div>
-            <div className="text-xs text-slate-500">electricity units a month {c.bill.monthlyUnitsKwh ? '' : '(estimated from your bill)'}</div>
+            <div className="text-2xl font-bold">about {num(c.bill.monthlyUnitsKwh || units / 12)}</div>
+            <div className="text-xs text-slate-500">{t('electricity units a month')} {c.bill.monthlyUnitsKwh ? '' : '(estimated from your bill)'}</div>
           </div>
         </div>
         {r.customerMessages.slice(0, 1).map((m) => (
           <p key={m} className="rounded-xl bg-surface p-3 text-[15px]">
-            {m}
+            {t(m)}
           </p>
         ))}
         <p className="text-xs text-slate-500">We cannot see exactly when you use electricity from a monthly bill. We used your working hours to estimate it; our team can use detailed meter data later.</p>
@@ -95,7 +95,7 @@ export default function Results() {
             <div className="text-3xl font-bold text-teal-800">
               {inr(roundFriendly(r.savingsRangeMonthlyInr[0]))} – {inr(roundFriendly(r.savingsRangeMonthlyInr[1]))}
             </div>
-            <div className="text-sm text-teal-800/80">{t('per month')}, after paying JioUrja for the solar electricity (Energy-as-a-Service plan)</div>
+            <div className="text-sm text-teal-800/80">{t('per month')}, {t('after paying JioUrja for the solar electricity (Energy-as-a-Service plan)')}</div>
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
@@ -103,14 +103,14 @@ export default function Results() {
               <div className="flex items-center gap-1.5 text-xs font-medium text-slate-500">
                 <IndianRupee className="h-3.5 w-3.5" /> {t('Do you need to pay anything upfront?')}
               </div>
-              <div className="mt-1 font-semibold">No installation cost on the service plan*</div>
+              <div className="mt-1 font-semibold">{t('No installation cost on the service plan*')}</div>
               <div className="text-xs text-slate-500">*A refundable security deposit of about {inr(roundFriendly(ch.customerPpa.upfrontDepositInr))} may apply, subject to approval.</div>
             </div>
             <div className="rounded-xl bg-surface p-3.5">
               <div className="flex items-center gap-1.5 text-xs font-medium text-slate-500">
                 <Home className="h-3.5 w-3.5" /> {t('Is your roof suitable?')}
               </div>
-              <div className="mt-1 font-semibold">{c.roof.polygon.length >= 3 ? `Looks promising — ${shadeLabel(a.roof).toLowerCase()}` : 'Not checked yet'}</div>
+              <div className="mt-1 font-semibold">{c.roof.polygon.length >= 3 ? `Looks promising — ${shadeLabel(a.roof).toLowerCase()}` : t('Not checked yet')}</div>
               <div className="text-xs text-slate-500">{roofLbl.text}</div>
             </div>
             <div className="rounded-xl bg-surface p-3.5">
@@ -118,7 +118,7 @@ export default function Results() {
                 <ShieldCheck className="h-3.5 w-3.5" /> {t('Assessment confidence')}
               </div>
               <div className="mt-1">
-                <Badge tone={conf.tone}>{conf.label}</Badge>
+                <Badge tone={conf.tone}>{t(conf.label)}</Badge>
               </div>
               <div className="mt-1 text-xs text-slate-500">{conf.help}</div>
             </div>
@@ -126,7 +126,7 @@ export default function Results() {
               <div className="flex items-center gap-1.5 text-xs font-medium text-slate-500">
                 <CalendarCheck className="h-3.5 w-3.5" /> {t('Next step')}
               </div>
-              <div className="mt-1 font-semibold">Free engineer visit to check your roof and wiring</div>
+              <div className="mt-1 font-semibold">{t('Free engineer visit to check your roof and wiring')}</div>
             </div>
           </div>
 
@@ -134,14 +134,14 @@ export default function Results() {
             {r.customerMessages.slice(1).map((m) => (
               <li key={m} className="flex gap-2">
                 <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-teal" />
-                {m}
+                {t(m)}
               </li>
             ))}
           </ul>
 
           <details className="group rounded-xl border border-slate-200">
             <summary className="flex cursor-pointer list-none items-center justify-between p-3 text-sm font-semibold">
-              How did we work this out?
+              {t('How did we work this out?')}
               <ChevronDown className="h-4 w-4 transition group-open:rotate-180" />
             </summary>
             <div className="space-y-1.5 border-t border-slate-100 p-3 text-sm text-slate-600">

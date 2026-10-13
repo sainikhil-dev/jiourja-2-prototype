@@ -59,14 +59,13 @@ export function telemetryFor(c: Customer, global: Assumptions, tickets: ServiceT
   const day = sim.sampleDays[today.getMonth()] ?? sim.sampleDays[0] ?? [];
   const todayWeather = 0.85 + rnd() * 0.2;
   const usable = battery ? battery.capacityKwh : 0;
-  const todaySeries = day.map((iv, hour) => ({
-    hour,
-    solarKw: iv.solar * todayWeather * (openAlert ? 0.9 : 1),
-    loadKw: iv.load,
-    gridKw: iv.gridImport - iv.gridExport,
-    batteryKw: iv.batteryToLoad - iv.solarToBattery - iv.gridToBattery,
-    socPct: battery && usable > 0 ? (iv.socKwh / usable) * 100 : null,
-  }));
+  const todaySeries = day.map((iv, hour) => {
+    const solarKw = iv.solar * todayWeather * (openAlert ? 0.9 : 1);
+    const charge = Math.min(iv.solarToBattery, solarKw) + iv.gridToBattery;
+    const batteryKw = iv.batteryToLoad - charge;
+    // Keep the displayed flows balanced: load = solar + battery + grid (grid negative = export).
+    return { hour, solarKw, loadKw: iv.load, gridKw: iv.load - solarKw - batteryKw, batteryKw, socPct: battery && usable > 0 ? (iv.socKwh / usable) * 100 : null };
+  });
   const last = recent[recent.length - 1];
   const nextPay = new Date(today.getFullYear(), today.getMonth() + 1, 5);
   const outstanding = (inst.outstandingMonths ?? 0) * (last?.paymentInr ?? 0);

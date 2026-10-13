@@ -53,7 +53,7 @@ export default function Portfolio() {
                 <Tooltip />
                 <Legend wrapperStyle={{ fontSize: 11 }} />
                 {active.map(({ c }, i) => (
-                  <Bar key={c.id} dataKey={c.business.name} stackId="a" fill={colors[i % colors.length]} />
+                  <Bar isAnimationActive={false} key={c.id} dataKey={c.business.name} stackId="a" fill={colors[i % colors.length]} />
                 ))}
               </BarChart>
             </ResponsiveContainer>
@@ -68,8 +68,8 @@ export default function Portfolio() {
                 <YAxis fontSize={11} tickFormatter={(v) => `${Math.round(v / 1000)}k`} />
                 <Tooltip formatter={(v: number) => inr(v)} />
                 <Legend wrapperStyle={{ fontSize: 11 }} />
-                <Line type="monotone" dataKey="Bill avoided" stroke="#087AD1" strokeWidth={2} />
-                <Line type="monotone" dataKey="Customer net savings" stroke="#12B8A6" strokeWidth={2} />
+                <Line isAnimationActive={false} type="monotone" dataKey="Bill avoided" stroke="#087AD1" strokeWidth={2} />
+                <Line isAnimationActive={false} type="monotone" dataKey="Customer net savings" stroke="#12B8A6" strokeWidth={2} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -95,10 +95,10 @@ export default function Portfolio() {
                   <YAxis fontSize={11} unit=" kW" width={55} />
                   <Tooltip />
                   <Legend wrapperStyle={{ fontSize: 11 }} />
-                  <Line dataKey="Solar" stroke="#F1B650" strokeWidth={2} dot={false} />
-                  <Line dataKey="Load" stroke="#092348" strokeWidth={2} dot={false} />
-                  <Line dataKey="Grid" stroke="#087AD1" strokeWidth={2} dot={false} />
-                  {sel.c.installation.batteryKwh ? <Line dataKey="Battery" stroke="#12B8A6" strokeWidth={2} dot={false} /> : null}
+                  <Line isAnimationActive={false} dataKey="Solar" stroke="#F1B650" strokeWidth={2} dot={false} />
+                  <Line isAnimationActive={false} dataKey="Load" stroke="#092348" strokeWidth={2} dot={false} />
+                  <Line isAnimationActive={false} dataKey="Grid" stroke="#087AD1" strokeWidth={2} dot={false} />
+                  {sel.c.installation.batteryKwh ? <Line isAnimationActive={false} dataKey="Battery" stroke="#12B8A6" strokeWidth={2} dot={false} /> : null}
                 </LineChart>
               </ResponsiveContainer>
             </div>

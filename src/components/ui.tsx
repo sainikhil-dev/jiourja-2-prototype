@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useId, useRef, useState, type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactNode, type SelectHTMLAttributes, type TextareaHTMLAttributes } from 'react';
+import { cloneElement, createContext, isValidElement, useCallback, useContext, useEffect, useId, useRef, useState, type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactNode, type SelectHTMLAttributes, type TextareaHTMLAttributes } from 'react';
 import { Link } from 'react-router-dom';
 import { AlertTriangle, CheckCircle2, FlaskConical, Info, Loader2, X } from 'lucide-react';
 import { cx } from '@/lib/format';
@@ -102,12 +102,17 @@ export function SimLabel({ children = 'Simulated data', className }: { children?
 }
 
 export function Field({ label, hint, error, children, htmlFor, optional }: { label: ReactNode; hint?: ReactNode; error?: string | null; children: ReactNode; htmlFor?: string; optional?: boolean }) {
+  const auto = useId();
+  // Link the label to a single form control child automatically (accessibility).
+  const single = isValidElement(children) && typeof children.type !== 'string' ? (children as React.ReactElement<{ id?: string }>) : isValidElement(children) && ['input', 'select', 'textarea'].includes(children.type as string) ? (children as React.ReactElement<{ id?: string }>) : null;
+  const controlId = htmlFor ?? single?.props.id ?? (single ? auto : undefined);
+  const content = single && !single.props.id && !htmlFor ? cloneElement(single, { id: controlId }) : children;
   return (
     <div className="space-y-1.5">
-      <label htmlFor={htmlFor} className="block text-sm font-medium text-navy">
+      <label htmlFor={controlId} className="block text-sm font-medium text-navy">
         {label} {optional && <span className="font-normal text-slate-400">(optional)</span>}
       </label>
-      {children}
+      {content}
       {hint && !error && <p className="text-xs text-slate-500">{hint}</p>}
       {error && (
         <p className="text-xs font-medium text-rose-600" role="alert">
@@ -162,11 +167,11 @@ export function Tabs<T extends string>({ tabs, value, onChange, className }: { t
           aria-selected={value === t.id}
           onClick={() => onChange(t.id)}
           className={cx(
-            'flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg px-3 py-2 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-electric',
+            'flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg px-2 py-2 text-sm font-semibold transition sm:px-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-electric',
             value === t.id ? 'bg-white text-navy shadow-sm' : 'text-slate-500 hover:text-navy',
           )}
         >
-          {t.icon}
+          {t.icon && <span className="hidden sm:inline-flex">{t.icon}</span>}
           {t.label}
         </button>
       ))}
@@ -266,7 +271,7 @@ export function Checkbox({ checked, onChange, label, description, disabled }: { 
   const id = useId();
   return (
     <label htmlFor={id} className={cx('flex cursor-pointer items-start gap-3 rounded-xl border p-3 transition', checked ? 'border-teal bg-teal-50/50' : 'border-slate-200 bg-white hover:border-slate-300', disabled && 'cursor-not-allowed opacity-60')}>
-      <input id={id} type="checkbox" disabled={disabled} className="mt-0.5 h-5 w-5 rounded border-slate-300 text-teal accent-teal-600" checked={checked} onChange={(e) => onChange(e.target.checked)} />
+      <input id={id} type="checkbox" disabled={disabled} className="mt-0.5 h-5 w-5 shrink-0 rounded border-slate-300 text-teal accent-teal-600" checked={checked} onChange={(e) => onChange(e.target.checked)} />
       <span>
         <span className="block text-sm font-medium text-navy">{label}</span>
         {description && <span className="block text-xs text-slate-500">{description}</span>}

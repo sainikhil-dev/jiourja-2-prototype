@@ -163,12 +163,12 @@ function Studio({ c }: { c: Customer }) {
                   <YAxis fontSize={11} unit=" kW" width={60} />
                   <Tooltip />
                   <Legend wrapperStyle={{ fontSize: 12 }} />
-                  <Area type="monotone" dataKey="Solar" fill="#F1B650" stroke="#c98d24" fillOpacity={0.35} />
-                  <Line type="monotone" dataKey="Load" stroke="#092348" strokeWidth={2} dot={false} />
-                  <Line type="monotone" dataKey="Grid import" stroke="#087AD1" strokeWidth={2} dot={false} strokeDasharray="4 3" />
-                  <Bar dataKey="Export" fill="#94a3b8" />
-                  {sel && sel.batteryKwh > 0 && <Bar dataKey="Battery discharge" fill="#12B8A6" />}
-                  {sel && sel.batteryKwh > 0 && <Bar dataKey="Battery charge" fill="#0e9586" fillOpacity={0.5} />}
+                  <Area isAnimationActive={false} type="linear" dataKey="Solar" fill="#F1B650" stroke="#c98d24" fillOpacity={0.35} />
+                  <Line isAnimationActive={false} type="linear" dataKey="Load" stroke="#092348" strokeWidth={2} dot={false} />
+                  <Line isAnimationActive={false} type="linear" dataKey="Grid import" stroke="#087AD1" strokeWidth={2} dot={false} strokeDasharray="4 3" />
+                  <Bar isAnimationActive={false} dataKey="Export" fill="#94a3b8" />
+                  {sel && sel.batteryKwh > 0 && <Bar isAnimationActive={false} dataKey="Battery discharge" fill="#12B8A6" />}
+                  {sel && sel.batteryKwh > 0 && <Bar isAnimationActive={false} dataKey="Battery charge" fill="#0e9586" fillOpacity={0.5} />}
                 </ComposedChart>
               </ResponsiveContainer>
             </div>
@@ -183,7 +183,7 @@ function Studio({ c }: { c: Customer }) {
                     <XAxis dataKey="hour" fontSize={11} interval={2} />
                     <YAxis fontSize={11} unit=" kWh" width={60} domain={[0, sel.batteryKwh]} />
                     <Tooltip />
-                    <Line type="stepAfter" dataKey="SOC kWh" stroke="#12B8A6" strokeWidth={2} dot={false} />
+                    <Line isAnimationActive={false} type="stepAfter" dataKey="SOC kWh" stroke="#12B8A6" strokeWidth={2} dot={false} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -198,7 +198,7 @@ function Studio({ c }: { c: Customer }) {
                     <XAxis dataKey="hour" fontSize={10} interval={2} />
                     <YAxis fontSize={10} domain={[0, 'auto']} />
                     <Tooltip formatter={(v: number) => `₹${v}`} labelFormatter={(h) => `${h}:00`} />
-                    <Bar dataKey="rate" fill="#087AD1" radius={[3, 3, 0, 0]} />
+                    <Bar isAnimationActive={false} dataKey="rate" fill="#087AD1" radius={[3, 3, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -233,7 +233,7 @@ function Studio({ c }: { c: Customer }) {
                     <XAxis dataKey="kW" fontSize={11} unit=" kW" />
                     <YAxis fontSize={11} />
                     <Tooltip />
-                    <Line type="monotone" dataKey="Customer NPV (₹ lakh)" stroke="#087AD1" strokeWidth={2} />
+                    <Line isAnimationActive={false} type="monotone" dataKey="Customer NPV (₹ lakh)" stroke="#087AD1" strokeWidth={2} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -403,7 +403,7 @@ function BillTable({ c, sel }: { c: Customer; sel?: ScenarioEconomics }) {
               <td className="py-1.5">{k}</td>
               <td className="text-right tabular-nums">{inr(x)}</td>
               <td className="text-right tabular-nums">{inr(y)}</td>
-              <td className="text-right tabular-nums text-teal-700">{inr(y - x)}</td>
+              <td className={`text-right tabular-nums ${y - x > 0.5 ? 'text-rose-600' : 'text-teal-700'}`}>{inr(y - x)}</td>
             </tr>
           ))}
           <tr className="font-bold">
@@ -589,9 +589,9 @@ function FinanceView({ c, sel, a, scenarios, setSelKey }: { c: Customer; sel: Sc
               <YAxis fontSize={11} tickFormatter={(v) => `${(v / 1e5).toFixed(1)}L`} />
               <Tooltip formatter={(v: number) => inr(v)} />
               <Legend wrapperStyle={{ fontSize: 12 }} />
-              <Bar dataKey="Customer net (PPA)" fill="#12B8A6" />
-              <Bar dataKey="Customer net (loan)" fill="#087AD1" />
-              <Bar dataKey="Provider net cash flow" fill="#F1B650" />
+              <Bar isAnimationActive={false} dataKey="Customer net (PPA)" fill="#12B8A6" />
+              <Bar isAnimationActive={false} dataKey="Customer net (loan)" fill="#087AD1" />
+              <Bar isAnimationActive={false} dataKey="Provider net cash flow" fill="#F1B650" />
             </BarChart>
           </ResponsiveContainer>
         </div>
