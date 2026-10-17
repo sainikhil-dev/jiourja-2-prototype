@@ -7,6 +7,8 @@ import type {
   EligibilityReview,
   LoadProfile,
   OnboardingDraft,
+  PaymentMethod,
+  PaymentRecord,
   PlanType,
   RoofAssessment,
   ServiceTicket,
@@ -106,7 +108,7 @@ export function submitEnquiry(state: AppState, draft: OnboardingDraft, id = newI
     stage: 'enquiry_received',
     stageHistory: [{ stage: 'enquiry_received', at: t, by: 'Customer portal' }],
     energyAssessmentStatus: 'preliminary',
-    installation: { documents: [] },
+    installation: { documents: [], paymentHistory: [] },
     assignedRep: 'Rahul Joshi',
     activity: [
       { at: t, by: 'Customer portal', text: `Enquiry submitted${draft.usedSample ? ' using the sample Pune factory data' : ''}.` },
@@ -342,6 +344,49 @@ export function activateSystem(state: AppState, customerId: string, by: string):
   );
   s = advanceTo(s, customerId, 'system_active', by);
   return s;
+}
+
+/**
+ * Record a bill payment from the customer portal. This is a DEMO payment
+ * confirmation only — no payment gateway, bank account or real money is
+ * involved. It clears an overdue invoice (if any) and logs a receipt that
+ * both the customer and staff can see.
+ */
+export function recordPayment(
+  state: AppState,
+  customerId: string,
+  data: { amountInr: number; method: PaymentMethod; forMonth?: string; clearedOverdue: boolean },
+  by: string,
+): { state: AppState; record: PaymentRecord } {
+  const record: PaymentRecord = {
+    id: newId('pay'),
+    at: nowIso(),
+    amountInr: Math.round(data.amountInr),
+    method: data.method,
+    forMonth: data.forMonth,
+    reference: `JU-${new Date().getFullYear()}-${Math.floor(100000 + Math.random() * 900000)}`,
+    clearedOverdue: data.clearedOverdue,
+  };
+  const methodLabel = { upi: 'UPI', card: 'card', netbanking: 'net banking' }[data.method];
+  const state2 = mapCustomer(state, customerId, (c) =>
+    log(
+      {
+        ...c,
+        installation: {
+          ...c.installation,
+          paymentHistory: [...c.installation.paymentHistory, record],
+          outstandingMonths: data.clearedOverdue ? Math.max(0, (c.installation.outstandingMonths ?? 0) - 1) : c.installation.outstandingMonths,
+        },
+      },
+      by,
+      `Payment received: ${inrLog(record.amountInr)} via ${methodLabel} (demo payment — no real payment gateway connected). Reference ${record.reference}.`,
+    ),
+  );
+  return { state: state2, record };
+}
+
+function inrLog(v: number): string {
+  return `₹${new Intl.NumberFormat('en-IN').format(v)}`;
 }
 
 export function createTicket(

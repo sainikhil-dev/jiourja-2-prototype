@@ -467,6 +467,20 @@ export interface SiteSurvey {
   updatedAt: ISODate;
 }
 
+export type PaymentMethod = 'upi' | 'card' | 'netbanking';
+
+export interface PaymentRecord {
+  id: string;
+  at: ISODate;
+  amountInr: number;
+  method: PaymentMethod;
+  /** Billing month this payment is applied to (yyyy-mm), when known. */
+  forMonth?: string;
+  reference: string;
+  /** True when this payment cleared an overdue invoice rather than the regular upcoming bill. */
+  clearedOverdue: boolean;
+}
+
 export interface Installation {
   scheduledDate?: string;
   completedDate?: string;
@@ -481,8 +495,10 @@ export interface Installation {
   contractStart?: string;
   contractYears?: number;
   documents: { name: string; kind: string }[];
-  /** Number of unpaid monthly invoices (sample payment exception). */
+  /** Number of unpaid monthly invoices (sample payment exception). Cleared by a customer payment. */
   outstandingMonths?: number;
+  /** Demo payments made by the customer from the portal (no real payment gateway). */
+  paymentHistory: PaymentRecord[];
 }
 
 export type TicketStatus = 'open' | 'assigned' | 'in_progress' | 'resolved' | 'closed';

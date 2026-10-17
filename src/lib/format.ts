@@ -56,6 +56,13 @@ export function monthLabel(yyyymm: string): string {
   return new Date(y, m - 1, 1).toLocaleDateString('en-IN', { month: 'short', year: '2-digit' });
 }
 
+/** True when an ISO timestamp falls in the same calendar month/year as `ref` (default: today). */
+export function sameMonth(iso: string | undefined, ref: Date = new Date()): boolean {
+  if (!iso) return false;
+  const d = new Date(iso);
+  return d.getFullYear() === ref.getFullYear() && d.getMonth() === ref.getMonth();
+}
+
 export function hourLabel(h: number): string {
   const hh = ((h % 24) + 24) % 24;
   const suffix = hh < 12 ? 'AM' : 'PM';

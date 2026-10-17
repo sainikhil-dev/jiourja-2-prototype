@@ -6,7 +6,7 @@ import App from '@/App';
 import { createInitialState, samplePuneFactoryDraft } from '@/data/seed';
 import { assessCustomer } from '@/engine';
 import { store, hydrateInstalledSystems } from '@/store/store';
-import { bookSurvey, createTicket, generateProposal, selectPlan, submitEnquiry, updateEligibility, updateSurvey, updateTicket, verifyRoof } from '@/store/actions';
+import { bookSurvey, createTicket, generateProposal, recordPayment, selectPlan, submitEnquiry, updateEligibility, updateSurvey, updateTicket, verifyRoof } from '@/store/actions';
 import type { AppState } from '@/types';
 
 // Recharts' ResponsiveContainer needs ResizeObserver in jsdom.
@@ -114,6 +114,64 @@ describe('service tickets', () => {
     expect(await screen.findByText(/Your solar system is working well/)).toBeInTheDocument();
     expect(screen.getAllByText(/Simulated monitoring/i).length).toBeGreaterThan(0);
     expect(screen.queryByText(/Battery .*charged/)).not.toBeInTheDocument();
+  });
+});
+
+describe('bill payment', () => {
+  beforeEach(() => store.set(fresh()));
+
+  it('recordPayment clears an overdue invoice, logs a receipt and is reflected in staff-visible data', () => {
+    const before = store.get().customers.find((c) => c.id === 'cus_deccan')!;
+    expect(before.installation.outstandingMonths).toBe(1);
+    expect(before.installation.paymentHistory).toHaveLength(0);
+
+    const r = recordPayment(store.get(), 'cus_deccan', { amountInr: 7975, method: 'upi', clearedOverdue: true }, 'Customer portal');
+    store.set(r.state);
+
+    const after = store.get().customers.find((c) => c.id === 'cus_deccan')!;
+    expect(after.installation.outstandingMonths).toBe(0);
+    expect(after.installation.paymentHistory).toHaveLength(1);
+    expect(after.installation.paymentHistory[0]).toMatchObject({ amountInr: 7975, method: 'upi', clearedOverdue: true });
+    expect(after.installation.paymentHistory[0].reference).toMatch(/^JU-/);
+    expect(after.activity.at(-1)!.text).toMatch(/Payment received: ₹7,975 via UPI/);
+    expect(after.activity.at(-1)!.text).toMatch(/demo payment/i);
+    expect(r.record.id).toBeTruthy();
+  });
+
+  it('a regular (non-overdue) payment does not touch outstandingMonths', () => {
+    const r = recordPayment(store.get(), 'cus_mahalaxmi', { amountInr: 14259, method: 'card', forMonth: '2026-10', clearedOverdue: false }, 'Customer portal');
+    const after = r.state.customers.find((c) => c.id === 'cus_mahalaxmi')!;
+    expect(after.installation.outstandingMonths ?? 0).toBe(0);
+    expect(after.installation.paymentHistory[0]).toMatchObject({ clearedOverdue: false, forMonth: '2026-10' });
+  });
+
+  it('customer can pay an overdue bill from the portal, and the console shows it as up to date', async () => {
+    store.set({ ...store.get(), portalCustomerId: 'cus_deccan' });
+    const user = userEvent.setup();
+    const { unmount } = render(
+      <MemoryRouter initialEntries={['/my']}>
+        <App />
+      </MemoryRouter>,
+    );
+    expect(await screen.findByText(/Payment overdue/)).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Pay Now' }));
+    await user.click(await screen.findByRole('button', { name: /^Pay ₹/ }));
+    expect(await screen.findByText('Payment confirmed', {}, { timeout: 2000 })).toBeInTheDocument();
+    expect(screen.getByText(/Reference JU-/)).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Done' }));
+
+    const cust = store.get().customers.find((c) => c.id === 'cus_deccan')!;
+    expect(cust.installation.outstandingMonths).toBe(0);
+    expect(cust.installation.paymentHistory).toHaveLength(1);
+    unmount();
+
+    store.set({ ...store.get(), staffUserId: 'stf_priya' });
+    render(
+      <MemoryRouter initialEntries={[`/console/customers/${cust.id}`]}>
+        <App />
+      </MemoryRouter>,
+    );
+    expect(await screen.findByText('Up to date')).toBeInTheDocument();
   });
 });
 

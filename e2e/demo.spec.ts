@@ -96,5 +96,21 @@ test('end-to-end Pune MSME journey', async ({ page }) => {
   await page.goto('/my');
   await page.getByRole('tab', { name: 'Help' }).click();
   await expect(page.getByRole('button', { name: /Request an engineer.*resolved/ })).toBeVisible();
+
+  // 27 Pay an overdue bill from the customer portal and confirm the console reflects it
+  await page.getByRole('link', { name: 'Switch demo customer' }).click();
+  await page.getByRole('button', { name: /Deccan Precision Tools/ }).click();
+  await expect(page.getByText(/Payment overdue/)).toBeVisible();
+  await page.getByRole('button', { name: 'Pay Now' }).click();
+  await page.getByRole('button', { name: /^Pay ₹/ }).click();
+  await expect(page.getByText('Payment confirmed')).toBeVisible();
+  await expect(page.getByText(/Reference JU-/)).toBeVisible();
+  await page.getByRole('button', { name: 'Done' }).click();
+  await expect(page.getByText(/Payment overdue/)).not.toBeVisible();
+
+  await page.goto('/console/pipeline');
+  await page.getByRole('link', { name: 'Deccan Precision Tools' }).first().click();
+  await expect(page.getByText('Up to date')).toBeVisible();
+
   expect(errors).toEqual([]);
 });

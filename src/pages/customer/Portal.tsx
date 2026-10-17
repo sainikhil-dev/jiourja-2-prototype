@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import { AlertTriangle, CalendarCheck, CheckCircle2, ClipboardList, CreditCard, FileDown, FileText, Headphones, Home, LifeBuoy, PiggyBank, Repeat, Sun, Wrench } from 'lucide-react';
+import { AlertTriangle, CalendarCheck, CheckCircle2, ClipboardList, CreditCard, FileDown, FileText, Headphones, Home, IndianRupee, LifeBuoy, PiggyBank, Receipt, Repeat, Sun, Wrench } from 'lucide-react';
 import { Badge, Button, Card, EmptyState, Field, LinkButton, Modal, Notice, Select, SimLabel, Stat, Tabs, Textarea, useToast } from '@/components/ui';
 import { EnergyFlow, roofStatusLabel, screeningLabel, StageTracker } from '@/components/customerBits';
+import { PayBillModal } from '@/components/PayBillModal';
 import { useI18n } from '@/i18n/i18n';
 import { getAssessment, getTelemetry, store, useAppState } from '@/store/store';
 import { acceptProposal, createTicket, generateProposal, stageLabel } from '@/store/actions';
-import { dateLabel, dateTimeLabel, inr, monthLabel, num, roundFriendly } from '@/lib/format';
+import { dateLabel, dateTimeLabel, inr, monthLabel, num, roundFriendly, sameMonth } from '@/lib/format';
 import type { Customer, ServiceTicket, TicketCategory } from '@/types';
 
 export default function Portal() {
@@ -185,7 +186,9 @@ function ActiveDashboard({ c }: { c: Customer }) {
   const s = useAppState();
   const { t } = useI18n();
   const nav = useNavigate();
+  const toast = useToast();
   const [tab, setTab] = useState<'home' | 'savings' | 'plan' | 'help'>('home');
+  const [payOpen, setPayOpen] = useState(false);
   const tel = getTelemetry(c, s);
   const tickets = s.tickets.filter((x) => x.customerId === c.id);
   const inst = c.installation;
@@ -194,6 +197,14 @@ function ActiveDashboard({ c }: { c: Customer }) {
   const last = tel.months[tel.months.length - 1];
   const nowHour = Math.min(23, new Date().getHours());
   const now = tel.today[nowHour] ?? tel.today[12];
+  const isOverdue = tel.outstandingInr > 0;
+  const paidThisCycle = !isOverdue && inst.paymentHistory.some((p) => !p.clearedOverdue && sameMonth(p.at));
+  const dueAmount = isOverdue ? tel.outstandingInr : tel.nextPaymentInr;
+  const currentMonth = new Date().toISOString().slice(0, 7);
+  const goToPay = () => {
+    setTab('plan');
+    setPayOpen(true);
+  };
   const six = tel.months.slice(-6).map((m) => ({ month: monthLabel(m.month), 'Bill avoided': Math.round(m.avoidedCostInr), [inst.planType === 'ppa' ? 'JioUrja payment' : 'EMI + maintenance']: Math.round(m.paymentInr), 'Net savings': Math.round(m.netSavingsInr) }));
   return (
     <div className="space-y-5">
@@ -236,6 +247,18 @@ function ActiveDashboard({ c }: { c: Customer }) {
               </div>
               <Button variant="secondary" onClick={() => setTab('help')}>
                 {t('Request an engineer')}
+              </Button>
+            </div>
+          )}
+          {isOverdue && (
+            <div className="flex flex-wrap items-center gap-3 rounded-2xl bg-rose-50 p-5 ring-1 ring-rose-200">
+              <IndianRupee className="h-9 w-9 shrink-0 text-rose-600" />
+              <div className="flex-1">
+                <div className="text-xl font-bold text-rose-900">Payment overdue: {inr(tel.outstandingInr)}</div>
+                <div className="text-sm text-rose-900/80">Please pay to keep your account in good standing.</div>
+              </div>
+              <Button variant="danger" onClick={goToPay}>
+                Pay Now
               </Button>
             </div>
           )}
@@ -299,7 +322,6 @@ function ActiveDashboard({ c }: { c: Customer }) {
                 ...(hasBattery ? [['Battery', `${inst.batteryKwh} kWh / ${num(inst.batteryKw, 1)} kW`]] : []),
                 ...(inst.planType === 'ppa' ? [['Price per solar unit', `₹${(inst.ppaRateInrPerKwh ?? 0).toFixed(2)}`], ['Contract', `${inst.contractYears ?? 15} years from ${dateLabel(inst.contractStart)}`]] : [['Loan EMI', inr(inst.emiInr)], ['Loan provided by', 'Partner lender (sample)']]),
                 ['Commissioned', dateLabel(inst.commissionedDate)],
-                ['Next payment', `${inr(tel.nextPaymentInr)} (est.) on ${dateLabel(tel.nextPaymentDate)}`],
               ].map(([k, v]) => (
                 <div key={k} className="flex justify-between gap-3 border-b border-slate-100 pb-2">
                   <dt className="text-slate-500">{k}</dt>
@@ -307,16 +329,66 @@ function ActiveDashboard({ c }: { c: Customer }) {
                 </div>
               ))}
             </dl>
-            {tel.outstandingInr > 0 && (
-              <Notice tone="warn" className="mt-3">
-                One invoice of about {inr(tel.outstandingInr)} is overdue (sample). Use “Payment enquiry” under Help if you have questions.
-              </Notice>
-            )}
             <div className="mt-4 flex flex-wrap gap-2">
               <Button variant="outline" size="sm" icon={<FileDown className="h-4 w-4" />} onClick={() => nav(`/proposal/${c.id}?mode=statement`)}>
                 Download statement / plan
               </Button>
             </div>
+          </Card>
+          <Card title="Payments">
+            {isOverdue ? (
+              <div className="rounded-xl bg-rose-50 p-4 ring-1 ring-rose-200">
+                <div className="text-xs font-semibold uppercase tracking-wide text-rose-700">Overdue</div>
+                <div className="mt-1 text-2xl font-bold text-rose-900">{inr(tel.outstandingInr)}</div>
+                <Button className="mt-3" variant="danger" block onClick={() => setPayOpen(true)}>
+                  Pay Now
+                </Button>
+              </div>
+            ) : paidThisCycle ? (
+              <div className="rounded-xl bg-teal-50 p-4 ring-1 ring-teal-100">
+                <div className="flex items-center gap-2 text-teal-800">
+                  <CheckCircle2 className="h-5 w-5" />
+                  <span className="font-semibold">Paid for {monthLabel(currentMonth)}</span>
+                </div>
+                <div className="mt-1 text-sm text-teal-800/80">
+                  {(() => {
+                    const last2 = [...inst.paymentHistory].reverse().find((p) => !p.clearedOverdue && sameMonth(p.at));
+                    return last2 ? `${inr(last2.amountInr)} on ${dateLabel(last2.at)} · Ref ${last2.reference}` : null;
+                  })()}
+                </div>
+              </div>
+            ) : (
+              <div className="rounded-xl bg-surface p-4">
+                <div className="text-xs font-medium text-slate-500">Next payment</div>
+                <div className="mt-1 text-2xl font-bold text-navy">{inr(tel.nextPaymentInr)}</div>
+                <div className="text-xs text-slate-500">due {dateLabel(tel.nextPaymentDate)} (est.)</div>
+                <Button className="mt-3" variant="teal" block onClick={() => setPayOpen(true)}>
+                  Pay Now
+                </Button>
+              </div>
+            )}
+            {inst.paymentHistory.length > 0 && (
+              <div className="mt-4">
+                <h3 className="mb-2 flex items-center gap-1.5 text-sm font-semibold text-navy">
+                  <Receipt className="h-4 w-4" /> Payment history
+                </h3>
+                <ul className="space-y-1.5">
+                  {[...inst.paymentHistory]
+                    .reverse()
+                    .slice(0, 6)
+                    .map((p) => (
+                      <li key={p.id} className="flex items-center justify-between gap-2 rounded-lg bg-surface px-3 py-2 text-sm">
+                        <span>
+                          <span className="font-medium">{inr(p.amountInr)}</span>
+                          <span className="text-slate-500"> · {dateLabel(p.at)} · {{ upi: 'UPI', card: 'Card', netbanking: 'Net banking' }[p.method]}</span>
+                        </span>
+                        <span className="text-xs text-slate-400">{p.reference}</span>
+                      </li>
+                    ))}
+                </ul>
+              </div>
+            )}
+            <p className="mt-3 text-xs text-slate-500">Demo payments only — no payment gateway or bank account is connected in this prototype.</p>
           </Card>
           <Card title="Installation documents">
             {inst.documents.length ? (
@@ -338,6 +410,16 @@ function ActiveDashboard({ c }: { c: Customer }) {
         </div>
       )}
       {tab === 'help' && <HelpPanel c={c} tickets={tickets} />}
+      <PayBillModal
+        open={payOpen}
+        onClose={() => setPayOpen(false)}
+        customerId={c.id}
+        amountInr={dueAmount}
+        dueLabel={isOverdue ? 'overdue invoice' : `your ${monthLabel(currentMonth)} bill`}
+        forMonth={isOverdue ? undefined : currentMonth}
+        clearedOverdue={isOverdue}
+        onPaid={(r) => toast(`Payment of ${inr(r.amountInr)} recorded. Thank you!`)}
+      />
     </div>
   );
 }

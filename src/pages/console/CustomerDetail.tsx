@@ -246,6 +246,30 @@ export default function CustomerDetail() {
             {stageIdx < STAGES.indexOf('customer_acceptance') && <p className="mt-2 text-xs text-slate-500">Installation is normally scheduled after the customer accepts the final proposal and signs the contract.</p>}
           </Card>
 
+          {c.stage === 'system_active' && (
+            <Card title="Payments" action={(c.installation.outstandingMonths ?? 0) > 0 ? <Badge tone="red">{c.installation.outstandingMonths} invoice overdue</Badge> : <Badge tone="teal">Up to date</Badge>}>
+              {c.installation.paymentHistory.length === 0 ? (
+                <p className="text-sm text-slate-500">No payments recorded yet.</p>
+              ) : (
+                <ul className="space-y-1.5 text-sm">
+                  {[...c.installation.paymentHistory]
+                    .reverse()
+                    .slice(0, 8)
+                    .map((p) => (
+                      <li key={p.id} className="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-surface px-3 py-2">
+                        <span>
+                          {inr(p.amountInr)} · {dateTimeLabel(p.at)} · {{ upi: 'UPI', card: 'Card', netbanking: 'Net banking' }[p.method]}
+                          {p.clearedOverdue && <Badge tone="amber" className="ml-1.5">cleared overdue</Badge>}
+                        </span>
+                        <span className="text-xs text-slate-400">{p.reference}</span>
+                      </li>
+                    ))}
+                </ul>
+              )}
+              <p className="mt-2 text-xs text-slate-500">Customers pay from their own portal (demo payment confirmation; no payment gateway is connected). This view is read-only for staff.</p>
+            </Card>
+          )}
+
           <Card title="Site visits & service tickets">
             {surveys.length + tickets.length === 0 && <p className="text-sm text-slate-500">None yet.</p>}
             <ul className="space-y-2 text-sm">

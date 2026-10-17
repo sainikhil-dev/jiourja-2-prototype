@@ -158,7 +158,7 @@ function build(s: SeedSpec): Customer {
     stage: s.stage,
     stageHistory: stageHistoryTo(s.stage, s.createdAt),
     energyAssessmentStatus: s.energyReviewed ? 'reviewed_by_staff' : 'preliminary',
-    installation: { documents: [], ...s.installation },
+    installation: { documents: [], paymentHistory: [], ...s.installation },
     assignedRep: s.rep,
     activity: s.activity.map((text, i) => ({ at: new Date(new Date(s.createdAt).getTime() + i * 5 * 86400000).toISOString(), by: i === 0 ? 'Customer portal' : s.rep, text })),
     telemetrySeed: s.telemetrySeed,

@@ -22,6 +22,7 @@ The prototype covers the full journey for an MSME customer and the JioUrja emplo
 | Site-visit booking and an 8-stage progress tracker | Commercial assessment: 9-item checklist, decision, risk flags, proposal approval |
 | Active-system dashboard (Home / Savings / My Plan / Help) | Installation & maintenance: survey confirmation, scheduling, commissioning, tickets, simulated alerts |
 | Service tickets that staff can update and the customer can track | Portfolio monitoring: generation, savings, availability, overdue payments, alerts and per-site drill-down |
+| **Pay Now**: a bill-payment flow (UPI / card / net banking selector, demo confirmation, receipt with reference number, payment history) that clears overdue invoices and settles the regular PPA/EMI bill | Read-only **Payments** card on each active customer showing payment history and overdue status, feeding the portfolio's "Payment exceptions" and "Outstanding payments" stats |
 
 A **Start Guided Demo** panel takes you through the competition storyline in 16 steps. Each step is completed by doing the real action in the UI, and the panel detects when the step is done.
 
@@ -115,7 +116,7 @@ Results for the seeded cases with default assumptions:
 
 ## 7. Tests
 
-`npm test` runs 34 tests, covering every check requested in the brief:
+`npm test` runs 37 tests, covering every check requested in the brief:
 
 1. Solar generation never exceeds the production input, and all solar energy is accounted for.
 2. Battery SOC stays within its limits.
@@ -145,6 +146,7 @@ There are also tests for IRR/NPV, PPA pricing, CSV import, onboarding validation
 7. Installation & Maintenance → **Confirm** the visit.
 8. Customer portal → visit confirmed, roof verified → **Switch demo customer** → Mahalaxmi Food Products (or Om Packaging, which has a battery) → Home / Savings / My Plan → Help → **Request an engineer**.
 9. Console → Service tickets → open → **Mark resolved** → customer Help tab shows *resolved*.
+10. Optional: switch to **Deccan Precision Tools**, which has a sample overdue invoice — the Home tab shows a red "Payment overdue" banner → **Pay Now** → choose UPI/Card/Net banking → confirm → the overdue banner clears, a receipt with a reference number appears in **My Plan → Payment history**, and the console's Customer Detail page shows the same payment and flips to "Up to date".
 
 ## 9. Working features vs simulated / future integrations
 
@@ -157,6 +159,7 @@ There are also tests for IRR/NPV, PPA pricing, CSV import, onboarding validation
 - assumption editing with recalculation;
 - CSV interval import;
 - proposal generation, versioning and printing (Print → Save as PDF);
+- bill payment (Pay Now): clears overdue invoices or settles the current cycle, records a receipt with a reference number, and is visible to staff — clearly labelled as a demo confirmation with no real payment gateway;
 - survey booking and confirmation;
 - stage tracking;
 - commercial checklist and decisions;
@@ -183,7 +186,8 @@ There are also tests for IRR/NPV, PPA pricing, CSV import, onboarding validation
 - live inverter or smart-meter telemetry;
 - credit bureau, bank or lender integrations (none are accessed);
 - DISCOM net-metering applications;
-- e-signature and payments;
+- e-signature;
+- a real payment gateway / bank connection (bill payment in the app is a labelled demo confirmation — see above);
 - technician dispatch;
 - a server-side database and real authentication.
 
