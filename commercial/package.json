@@ -1,0 +1,32 @@
+{
+  "name": "jiourja-commercial",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "FACTORY KA ASLI MAALIK! — 60s 2D cartoon TV commercial for JioUrja 2.0 (Remotion + SVG rigs)",
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "preview": "vite --config preview/vite.config.ts",
+    "build:preview": "vite build --config preview/vite.config.ts",
+    "typecheck": "tsc --noEmit",
+    "sfx": "node scripts/generate-placeholder-audio.mjs",
+    "render:preview": "remotion render src/index.ts Preview10s out/preview-10s.mp4",
+    "still:sheet": "remotion still src/index.ts CharacterSheet out/character-sheet.png --frame=40"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.538",
+    "@remotion/player": "^4.0.538",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.538"
+  },
+  "devDependencies": {
+    "@fontsource/baloo-2": "^5.3.0",
+    "@types/node": "^26.6.5",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11"
+  }
+}
