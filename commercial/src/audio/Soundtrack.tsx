@@ -46,8 +46,8 @@ export const Soundtrack: React.FC<{ beats: Resolved; sfx: Sfx[]; music: MusicCue
     {lineBeats(beats)
       .filter((b) => b.line.file)
       .map((b) => (
-        <Sequence key={b.id} from={b.line.audioFrom} name={`VO ${b.line.id}`}>
-          <Audio src={staticFile(b.line.file!)} volume={dialogueVol} />
+        <Sequence key={b.id} from={b.line.playFrom} durationInFrames={b.line.playTo - b.line.playFrom} name={`VO ${b.line.id}`}>
+          <Audio src={staticFile(b.line.file!)} startFrom={b.line.playFrom - b.line.fileZero} volume={dialogueVol} />
         </Sequence>
       ))}
     {sfx.map((s, i) => (

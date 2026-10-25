@@ -291,4 +291,115 @@ function tone(freq, sec, a, d, shape = (p) => Math.sin(p)) {
   }
   writeWav('music/villain_bed.wav', normalize(x.subarray(0, Math.ceil(sec * SR)), 0.75));
 }
+
+// ------------------------------------------------------- more SFX (scenes 2–5)
+// Grow: rising slide whistle + whoosh
+{
+  const x = tone((t) => 300 * 2 ** (t * 2.6), 0.85, 0.02, 0.5, (p) => Math.sin(p) + 0.2 * Math.sin(2 * p));
+  mix(x, lowpass(highpass(noiseBurst(0.85, 0.4, 0.2, 4000), 300), 4000), 0, 0.5);
+  writeWav('sfx/grow.wav', normalize(x, 0.6));
+}
+// Shrink: descending slide whistle (comic deflation)
+{
+  const x = tone((t) => 1400 * 2 ** (-t * 3.2) + 120, 1.0, 0.02, 0.6, (p) => Math.sin(p) + 0.15 * Math.sin(2 * p));
+  writeWav('sfx/shrink.wav', normalize(x, 0.55));
+}
+// Rubber stamp thud
+{
+  const x = mix(buf(0.6), kick(90, 0.4, 0.7), 0, 1);
+  mix(x, lowpass(noiseBurst(0.2, 0.001, 0.03, 3000), 3000), 0, 0.7);
+  writeWav('sfx/stamp.wav', normalize(x, 0.8));
+}
+// Panel pop: bubbly pop + metallic click
+{
+  const x = tone((t) => 500 + 900 * Math.exp(-t * 30), 0.25, 0.002, 0.05);
+  mix(x, highpass(noiseBurst(0.05, 0.001, 0.006, 9000), 2500), 0.03, 0.6);
+  writeWav('sfx/panel_pop.wav', normalize(x, 0.6));
+}
+// Sparkle: quick rising bell arpeggio
+{
+  const x = buf(1.4);
+  [84, 88, 91, 96, 100].forEach((n, i) => mix(x, tone(midi(n), 1.0, 0.002, 0.25), i * 0.06, 0.5));
+  writeWav('sfx/sparkle.wav', normalize(x, 0.5));
+}
+// Phone tap + success chime
+{
+  const x = mix(buf(0.15), highpass(noiseBurst(0.04, 0.001, 0.005, 7000), 1500), 0, 1);
+  mix(x, tone(1800, 0.05, 0.001, 0.01), 0, 0.3);
+  writeWav('sfx/phone_tap.wav', normalize(x, 0.5));
+  const y = buf(1.2);
+  mix(y, tone(midi(88), 1.0, 0.003, 0.3), 0, 0.6);
+  mix(y, tone(midi(95), 1.0, 0.003, 0.35), 0.09, 0.6);
+  writeWav('sfx/chime.wav', normalize(y, 0.5));
+}
+// Chair roll: rumbling casters + squeak, with doppler-ish fade
+{
+  const sec = 1.6;
+  let x = buf(sec);
+  for (let i = 0; i < x.length; i++) {
+    const t = i / SR;
+    x[i] = noise() * (0.6 + 0.4 * Math.sin(TAU * 18 * t)) * Math.min(1, t * 8) * Math.exp(-t * 1.2);
+  }
+  x = lowpass(x, 700);
+  mix(x, tone((t) => 900 + 300 * Math.sin(t * 14), 0.4, 0.02, 0.12, (p) => Math.sin(p) * 0.6), 0.05, 0.4);
+  writeWav('sfx/chair_roll.wav', normalize(x, 0.7));
+}
+// Comic sting for the punchline: "ba-dum-tss" (low tom, high tom, cymbal)
+{
+  const x = buf(1.6);
+  mix(x, kick(120, 0.3, 0.6), 0, 0.8);
+  mix(x, kick(180, 0.3, 0.6), 0.16, 0.7);
+  mix(x, highpass(noiseBurst(1.2, 0.002, 0.35, 12000), 4000), 0.34, 0.5);
+  writeWav('sfx/comic_sting.wav', normalize(x, 0.8));
+}
+// Hero lift: swelling brass into a bright major chord (the JioUrja turn)
+{
+  const x = buf(4);
+  const notes = [50, 57, 62, 66, 69];
+  notes.forEach((n, i) => mix(x, brass(n, 2.6, { attack: 0.35 + i * 0.08, release: 0.9 }), 0.0, 0.3));
+  mix(x, timpani(midi(38), 2.0), 0, 0.6);
+  mix(x, highpass(noiseBurst(1.4, 1.2, 0.3, 12000), 3500), 0, 0.2);
+  [86, 90, 93, 98].forEach((n, i) => mix(x, tone(midi(n), 1.4, 0.003, 0.4), 0.9 + i * 0.07, 0.12));
+  writeWav('music/hero_lift.wav', normalize(softclip(x, 1.2), 0.85));
+}
+// Uplift bed (loopable, 112 bpm, D major): plucked "santoor" arpeggios,
+// dholak groove, warm pad. Under the solar transformation and the app journey.
+{
+  const bpm = 112;
+  const beat = 60 / bpm;
+  const bars = 8;
+  const sec = bars * 4 * beat;
+  const x = buf(sec + 1);
+  const chords = [
+    [62, 66, 69, 74], // D
+    [59, 62, 66, 71], // Bm
+    [55, 59, 62, 67], // G
+    [57, 61, 64, 69], // A
+  ];
+  for (let bar = 0; bar < bars; bar++) {
+    const ch = chords[bar % 4];
+    const t0 = bar * 4 * beat;
+    // arpeggio 8ths
+    for (let k = 0; k < 8; k++) mix(x, pluck(midi(ch[k % 4] + 12), 0.7, 0.995, 0.7), t0 + (k * beat) / 2, 0.32);
+    // bass on 1 and 3
+    mix(x, pluck(midi(ch[0] - 12), 0.9, 0.996, 0.9), t0, 0.5);
+    mix(x, pluck(midi(ch[0] - 12), 0.9, 0.996, 0.9), t0 + 2 * beat, 0.4);
+    // pad
+    for (const n of ch.slice(0, 3)) mix(x, lowpass(saw(midi(n), 4 * beat, 6), 900).map((v, i) => v * Math.min(1, i / (SR * 0.4)) * 0.5), t0, 0.07);
+    // dholak: dha on 1, "na" slaps, ghost notes
+    for (const b of [0, 1.5, 2, 3.5]) mix(x, kick(80, 0.35, 0.8), t0 + b * beat, 0.45);
+    for (const b of [1, 3]) mix(x, highpass(noiseBurst(0.1, 0.001, 0.03, 6000), 800), t0 + b * beat, 0.32);
+    for (const b of [0.5, 2.5, 3.25]) mix(x, highpass(noiseBurst(0.05, 0.001, 0.012, 8000), 2000), t0 + b * beat, 0.14);
+  }
+  writeWav('music/uplift_bed.wav', normalize(x.subarray(0, Math.ceil(sec * SR)), 0.75));
+}
+// Brand end sting: bell + brass chord + shimmer
+{
+  const x = buf(4);
+  [62, 66, 69, 74, 78].forEach((n) => mix(x, brass(n, 1.6, { attack: 0.02, release: 1.2 }), 0, 0.22));
+  [86, 90, 93, 98, 102].forEach((n, i) => mix(x, tone(midi(n), 2.5, 0.002, 0.7), i * 0.05, 0.15));
+  mix(x, timpani(midi(38), 2.4), 0, 0.7);
+  writeWav('music/end_sting.wav', normalize(softclip(x, 1.2), 0.85));
+}
+
 console.log('\nAll placeholder audio written to public/audio/. Replace any file with a final mix of the same name.');

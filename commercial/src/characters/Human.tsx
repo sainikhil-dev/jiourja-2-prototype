@@ -219,3 +219,48 @@ export function walkPose(phase: number, stride = 26, bounce = 8): Partial<HumanP
     lean: 3,
   };
 }
+
+// ------------------------------------------------------- forward kinematics
+type M = [number, number, number, number, number, number]; // a b c d e f (SVG matrix)
+const mul = (m: M, n: M): M => [
+  m[0] * n[0] + m[2] * n[1],
+  m[1] * n[0] + m[3] * n[1],
+  m[0] * n[2] + m[2] * n[3],
+  m[1] * n[2] + m[3] * n[3],
+  m[0] * n[4] + m[2] * n[5] + m[4],
+  m[1] * n[4] + m[3] * n[5] + m[5],
+];
+const T = (x: number, y: number): M => [1, 0, 0, 1, x, y];
+const S = (x: number, y: number): M => [x, 0, 0, y, 0, 0];
+const R = (deg: number): M => {
+  const r = (deg * Math.PI) / 180;
+  return [Math.cos(r), Math.sin(r), -Math.sin(r), Math.cos(r), 0, 0];
+};
+
+/**
+ * World position of a hand (the palm centre) for a pose — the same transform
+ * chain the rig draws with — so props (a phone, a chai glass) stay locked in
+ * the hand through any gesture. Returns the hand's pointing angle too.
+ */
+export function handWorld(d: HumanDesign, p: HumanPose, side: -1 | 1, along = 26) {
+  const s = side === -1 ? p.aLs : p.aRs;
+  const e = side === -1 ? p.aLe : p.aRe;
+  const w = side === -1 ? p.aLw : p.aRw;
+  let m = mul(T(p.x, p.y), S(p.scale * p.facing * p.sx, p.scale * p.sy));
+  m = mul(m, T(0, p.crouch));
+  m = mul(m, T(0, -d.hipY));
+  m = mul(m, R(p.lean));
+  m = mul(m, T(0, d.hipY));
+  m = mul(m, T(0, -d.hipY));
+  m = mul(m, T(side * d.shoulderX, -d.shoulderY));
+  m = mul(m, S(side, 1));
+  m = mul(m, R(-s));
+  m = mul(m, T(0, d.upper));
+  m = mul(m, R(-e));
+  m = mul(m, T(0, d.fore));
+  m = mul(m, R(-w));
+  const x = m[0] * 0 + m[2] * along + m[4];
+  const y = m[1] * 0 + m[3] * along + m[5];
+  const angle = (Math.atan2(m[3], m[2]) * 180) / Math.PI - 90; // direction of the hand's +y axis
+  return { x, y, angle, scale: Math.hypot(m[0], m[1]) };
+}

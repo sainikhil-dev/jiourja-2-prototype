@@ -11,7 +11,8 @@
     "typecheck": "tsc --noEmit",
     "sfx": "node scripts/generate-placeholder-audio.mjs",
     "render:preview": "remotion render src/index.ts Preview10s out/preview-10s.mp4",
-    "still:sheet": "remotion still src/index.ts CharacterSheet out/character-sheet.png --frame=40"
+    "still:sheet": "remotion still src/index.ts CharacterSheet out/character-sheet.png --frame=40",
+    "analyze-audio": "node scripts/analyze-audio.mjs"
   },
   "dependencies": {
     "@remotion/cli": "^4.0.538",

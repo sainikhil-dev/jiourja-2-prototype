@@ -1,1 +1,2611 @@
-{}
+{
+ "s1_owner_kaun": {
+  "file": "audio/dialogue/s1_owner_kaun.wav",
+  "duration": 2.816,
+  "speechStart": 0.133,
+  "speechEnd": 2.6,
+  "cues": [
+   {
+    "start": 0,
+    "end": 0.133,
+    "value": "X"
+   },
+   {
+    "start": 0.133,
+    "end": 0.433,
+    "value": "C"
+   },
+   {
+    "start": 0.433,
+    "end": 0.9,
+    "value": "X"
+   },
+   {
+    "start": 0.9,
+    "end": 1,
+    "value": "C"
+   },
+   {
+    "start": 1,
+    "end": 1.267,
+    "value": "B"
+   },
+   {
+    "start": 1.267,
+    "end": 1.333,
+    "value": "F"
+   },
+   {
+    "start": 1.333,
+    "end": 1.567,
+    "value": "B"
+   },
+   {
+    "start": 1.567,
+    "end": 1.7,
+    "value": "C"
+   },
+   {
+    "start": 1.7,
+    "end": 1.933,
+    "value": "X"
+   },
+   {
+    "start": 1.933,
+    "end": 2.1,
+    "value": "E"
+   },
+   {
+    "start": 2.1,
+    "end": 2.233,
+    "value": "B"
+   },
+   {
+    "start": 2.233,
+    "end": 2.367,
+    "value": "C"
+   },
+   {
+    "start": 2.367,
+    "end": 2.433,
+    "value": "B"
+   },
+   {
+    "start": 2.433,
+    "end": 2.5,
+    "value": "C"
+   },
+   {
+    "start": 2.5,
+    "end": 2.6,
+    "value": "D"
+   },
+   {
+    "start": 2.6,
+    "end": 2.833,
+    "value": "X"
+   }
+  ],
+  "cueSource": "forced-alignment",
+  "alignMethod": "phrase-by-pause",
+  "nonverbal": [],
+  "words": [
+   {
+    "text": "अरे",
+    "start": 0.145,
+    "end": 0.42
+   },
+   {
+    "text": "मेरी",
+    "start": 0.825,
+    "end": 1.17
+   },
+   {
+    "text": "कुर्सी",
+    "start": 1.23,
+    "end": 1.544
+   },
+   {
+    "text": "पर",
+    "start": 1.577,
+    "end": 1.71
+   },
+   {
+    "text": "ये",
+    "start": 1.741,
+    "end": 1.86
+   },
+   {
+    "text": "कौन",
+    "start": 1.91,
+    "end": 2.2
+   },
+   {
+    "text": "बैठ",
+    "start": 2.23,
+    "end": 2.39
+   },
+   {
+    "text": "गया",
+    "start": 2.43,
+    "end": 2.63
+   }
+  ]
+ },
+ "s1_bill_kamai": {
+  "file": "audio/dialogue/s1_bill_kamai.wav",
+  "duration": 8.849,
+  "speechStart": 0.233,
+  "speechEnd": 8.467,
+  "cues": [
+   {
+    "start": 0,
+    "end": 0.233,
+    "value": "X"
+   },
+   {
+    "start": 0.233,
+    "end": 0.3,
+    "value": "B"
+   },
+   {
+    "start": 0.3,
+    "end": 0.4,
+    "value": "X"
+   },
+   {
+    "start": 0.4,
+    "end": 0.5,
+    "value": "D"
+   },
+   {
+    "start": 0.5,
+    "end": 0.633,
+    "value": "X"
+   },
+   {
+    "start": 0.633,
+    "end": 0.7,
+    "value": "D"
+   },
+   {
+    "start": 0.7,
+    "end": 1.333,
+    "value": "X"
+   },
+   {
+    "start": 1.333,
+    "end": 1.633,
+    "value": "B"
+   },
+   {
+    "start": 1.633,
+    "end": 1.8,
+    "value": "F"
+   },
+   {
+    "start": 1.8,
+    "end": 1.867,
+    "value": "D"
+   },
+   {
+    "start": 1.867,
+    "end": 2.033,
+    "value": "C"
+   },
+   {
+    "start": 2.033,
+    "end": 2.5,
+    "value": "X"
+   },
+   {
+    "start": 2.5,
+    "end": 2.567,
+    "value": "A"
+   },
+   {
+    "start": 2.567,
+    "end": 2.7,
+    "value": "B"
+   },
+   {
+    "start": 2.7,
+    "end": 2.767,
+    "value": "H"
+   },
+   {
+    "start": 2.767,
+    "end": 3,
+    "value": "B"
+   },
+   {
+    "start": 3,
+    "end": 3.2,
+    "value": "D"
+   },
+   {
+    "start": 3.2,
+    "end": 3.367,
+    "value": "X"
+   },
+   {
+    "start": 3.367,
+    "end": 3.567,
+    "value": "B"
+   },
+   {
+    "start": 3.567,
+    "end": 4.233,
+    "value": "X"
+   },
+   {
+    "start": 4.233,
+    "end": 4.3,
+    "value": "C"
+   },
+   {
+    "start": 4.3,
+    "end": 4.567,
+    "value": "B"
+   },
+   {
+    "start": 4.567,
+    "end": 4.7,
+    "value": "C"
+   },
+   {
+    "start": 4.7,
+    "end": 4.767,
+    "value": "B"
+   },
+   {
+    "start": 4.767,
+    "end": 4.833,
+    "value": "F"
+   },
+   {
+    "start": 4.833,
+    "end": 4.933,
+    "value": "A"
+   },
+   {
+    "start": 4.933,
+    "end": 5.067,
+    "value": "D"
+   },
+   {
+    "start": 5.067,
+    "end": 5.133,
+    "value": "B"
+   },
+   {
+    "start": 5.133,
+    "end": 5.767,
+    "value": "X"
+   },
+   {
+    "start": 5.767,
+    "end": 6.033,
+    "value": "C"
+   },
+   {
+    "start": 6.033,
+    "end": 6.133,
+    "value": "X"
+   },
+   {
+    "start": 6.133,
+    "end": 6.233,
+    "value": "B"
+   },
+   {
+    "start": 6.233,
+    "end": 6.333,
+    "value": "A"
+   },
+   {
+    "start": 6.333,
+    "end": 6.433,
+    "value": "D"
+   },
+   {
+    "start": 6.433,
+    "end": 6.533,
+    "value": "B"
+   },
+   {
+    "start": 6.533,
+    "end": 6.967,
+    "value": "X"
+   },
+   {
+    "start": 6.967,
+    "end": 7.2,
+    "value": "C"
+   },
+   {
+    "start": 7.2,
+    "end": 7.367,
+    "value": "B"
+   },
+   {
+    "start": 7.367,
+    "end": 7.5,
+    "value": "X"
+   },
+   {
+    "start": 7.5,
+    "end": 7.567,
+    "value": "C"
+   },
+   {
+    "start": 7.567,
+    "end": 7.667,
+    "value": "A"
+   },
+   {
+    "start": 7.667,
+    "end": 7.8,
+    "value": "D"
+   },
+   {
+    "start": 7.8,
+    "end": 7.933,
+    "value": "B"
+   },
+   {
+    "start": 7.933,
+    "end": 8.067,
+    "value": "A"
+   },
+   {
+    "start": 8.067,
+    "end": 8.167,
+    "value": "X"
+   },
+   {
+    "start": 8.167,
+    "end": 8.3,
+    "value": "C"
+   },
+   {
+    "start": 8.3,
+    "end": 8.467,
+    "value": "B"
+   },
+   {
+    "start": 8.467,
+    "end": 8.867,
+    "value": "X"
+   }
+  ],
+  "cueSource": "forced-alignment",
+  "alignMethod": "phrase-by-pause+whisper-anchor+laugh-split",
+  "nonverbal": [
+   [
+    0.23,
+    0.874
+   ]
+  ],
+  "words": [
+   {
+    "text": "मैं",
+    "start": 0.888,
+    "end": 1.084
+   },
+   {
+    "text": "हूँ",
+    "start": 1.094,
+    "end": 1.804
+   },
+   {
+    "text": "बिजली",
+    "start": 2.46,
+    "end": 2.86
+   },
+   {
+    "text": "का",
+    "start": 3.08,
+    "end": 3.249
+   },
+   {
+    "text": "बिल",
+    "start": 3.25,
+    "end": 3.62
+   },
+   {
+    "text": "मशीनें",
+    "start": 4.176,
+    "end": 4.71
+   },
+   {
+    "text": "तुम्हारी",
+    "start": 4.754,
+    "end": 5.27
+   },
+   {
+    "text": "मेहनत",
+    "start": 5.69,
+    "end": 6.13
+   },
+   {
+    "text": "तुम्हारी",
+    "start": 6.16,
+    "end": 6.629
+   },
+   {
+    "text": "लेकिन",
+    "start": 6.947,
+    "end": 7.391
+   },
+   {
+    "text": "कमाई",
+    "start": 7.456,
+    "end": 7.93
+   },
+   {
+    "text": "मेरी",
+    "start": 7.95,
+    "end": 8.52
+   }
+  ]
+ },
+ "s1_owner_vasooli": {
+  "file": "audio/dialogue/s1_owner_vasooli.wav",
+  "duration": 3.289,
+  "speechStart": 0.267,
+  "speechEnd": 2.967,
+  "cues": [
+   {
+    "start": 0,
+    "end": 0.3,
+    "value": "X"
+   },
+   {
+    "start": 0.3,
+    "end": 0.433,
+    "value": "C"
+   },
+   {
+    "start": 0.433,
+    "end": 0.567,
+    "value": "X"
+   },
+   {
+    "start": 0.567,
+    "end": 0.733,
+    "value": "B"
+   },
+   {
+    "start": 0.733,
+    "end": 0.8,
+    "value": "H"
+   },
+   {
+    "start": 0.8,
+    "end": 0.967,
+    "value": "B"
+   },
+   {
+    "start": 0.967,
+    "end": 1.033,
+    "value": "D"
+   },
+   {
+    "start": 1.033,
+    "end": 1.133,
+    "value": "A"
+   },
+   {
+    "start": 1.133,
+    "end": 1.267,
+    "value": "B"
+   },
+   {
+    "start": 1.267,
+    "end": 1.333,
+    "value": "H"
+   },
+   {
+    "start": 1.333,
+    "end": 1.433,
+    "value": "B"
+   },
+   {
+    "start": 1.433,
+    "end": 1.667,
+    "value": "C"
+   },
+   {
+    "start": 1.667,
+    "end": 2.067,
+    "value": "X"
+   },
+   {
+    "start": 2.067,
+    "end": 2.133,
+    "value": "B"
+   },
+   {
+    "start": 2.133,
+    "end": 2.3,
+    "value": "D"
+   },
+   {
+    "start": 2.3,
+    "end": 2.4,
+    "value": "C"
+   },
+   {
+    "start": 2.4,
+    "end": 2.5,
+    "value": "X"
+   },
+   {
+    "start": 2.5,
+    "end": 2.6,
+    "value": "F"
+   },
+   {
+    "start": 2.6,
+    "end": 2.667,
+    "value": "H"
+   },
+   {
+    "start": 2.667,
+    "end": 2.8,
+    "value": "B"
+   },
+   {
+    "start": 2.8,
+    "end": 2.967,
+    "value": "C"
+   },
+   {
+    "start": 2.967,
+    "end": 3.3,
+    "value": "X"
+   }
+  ],
+  "cueSource": "forced-alignment",
+  "alignMethod": "phrase-by-pause",
+  "nonverbal": [],
+  "words": [
+   {
+    "text": "ये",
+    "start": 0.234,
+    "end": 0.42
+   },
+   {
+    "text": "बिजली",
+    "start": 0.42,
+    "end": 0.89
+   },
+   {
+    "text": "का",
+    "start": 0.93,
+    "end": 1.04
+   },
+   {
+    "text": "बिल",
+    "start": 1.04,
+    "end": 1.33
+   },
+   {
+    "text": "है",
+    "start": 1.34,
+    "end": 1.67
+   },
+   {
+    "text": "या",
+    "start": 2.03,
+    "end": 2.26
+   },
+   {
+    "text": "वसूली",
+    "start": 2.27,
+    "end": 2.74
+   },
+   {
+    "text": "गैंग",
+    "start": 2.74,
+    "end": 3.01
+   }
+  ]
+ },
+ "s2_friend_solar": {
+  "file": "audio/dialogue/s2_friend_solar.wav",
+  "duration": 2.789,
+  "speechStart": 0.3,
+  "speechEnd": 2.6,
+  "cues": [
+   {
+    "start": 0,
+    "end": 0.333,
+    "value": "X"
+   },
+   {
+    "start": 0.333,
+    "end": 0.4,
+    "value": "B"
+   },
+   {
+    "start": 0.4,
+    "end": 0.533,
+    "value": "C"
+   },
+   {
+    "start": 0.533,
+    "end": 0.6,
+    "value": "A"
+   },
+   {
+    "start": 0.6,
+    "end": 0.8,
+    "value": "D"
+   },
+   {
+    "start": 0.8,
+    "end": 1.067,
+    "value": "B"
+   },
+   {
+    "start": 1.067,
+    "end": 1.333,
+    "value": "X"
+   },
+   {
+    "start": 1.333,
+    "end": 1.467,
+    "value": "E"
+   },
+   {
+    "start": 1.467,
+    "end": 1.567,
+    "value": "X"
+   },
+   {
+    "start": 1.567,
+    "end": 1.767,
+    "value": "E"
+   },
+   {
+    "start": 1.767,
+    "end": 1.833,
+    "value": "B"
+   },
+   {
+    "start": 1.833,
+    "end": 1.9,
+    "value": "H"
+   },
+   {
+    "start": 1.9,
+    "end": 2,
+    "value": "C"
+   },
+   {
+    "start": 2,
+    "end": 2.167,
+    "value": "D"
+   },
+   {
+    "start": 2.167,
+    "end": 2.233,
+    "value": "H"
+   },
+   {
+    "start": 2.233,
+    "end": 2.333,
+    "value": "E"
+   },
+   {
+    "start": 2.333,
+    "end": 2.433,
+    "value": "B"
+   },
+   {
+    "start": 2.433,
+    "end": 2.6,
+    "value": "D"
+   },
+   {
+    "start": 2.6,
+    "end": 2.8,
+    "value": "X"
+   }
+  ],
+  "cueSource": "forced-alignment",
+  "alignMethod": "phrase-by-pause",
+  "nonverbal": [],
+  "words": [
+   {
+    "text": "अरे",
+    "start": 0.296,
+    "end": 0.54
+   },
+   {
+    "text": "भाई",
+    "start": 0.54,
+    "end": 1.07
+   },
+   {
+    "text": "तो",
+    "start": 1.32,
+    "end": 1.42
+   },
+   {
+    "text": "सोलर",
+    "start": 1.43,
+    "end": 1.82
+   },
+   {
+    "text": "लगवा",
+    "start": 1.85,
+    "end": 2.16
+   },
+   {
+    "text": "लो",
+    "start": 2.17,
+    "end": 2.32
+   },
+   {
+    "text": "ना",
+    "start": 2.33,
+    "end": 2.62
+   }
+  ]
+ },
+ "s2_owner_lakhs": {
+  "file": "audio/dialogue/s2_owner_lakhs.wav",
+  "duration": 4.114,
+  "speechStart": 0.267,
+  "speechEnd": 3.867,
+  "cues": [
+   {
+    "start": 0,
+    "end": 0.3,
+    "value": "X"
+   },
+   {
+    "start": 0.3,
+    "end": 0.433,
+    "value": "D"
+   },
+   {
+    "start": 0.433,
+    "end": 0.533,
+    "value": "B"
+   },
+   {
+    "start": 0.533,
+    "end": 0.633,
+    "value": "E"
+   },
+   {
+    "start": 0.633,
+    "end": 0.7,
+    "value": "B"
+   },
+   {
+    "start": 0.7,
+    "end": 0.767,
+    "value": "F"
+   },
+   {
+    "start": 0.767,
+    "end": 0.833,
+    "value": "A"
+   },
+   {
+    "start": 0.833,
+    "end": 1.1,
+    "value": "B"
+   },
+   {
+    "start": 1.1,
+    "end": 1.3,
+    "value": "D"
+   },
+   {
+    "start": 1.3,
+    "end": 1.433,
+    "value": "C"
+   },
+   {
+    "start": 1.433,
+    "end": 1.633,
+    "value": "D"
+   },
+   {
+    "start": 1.633,
+    "end": 2.2,
+    "value": "X"
+   },
+   {
+    "start": 2.2,
+    "end": 2.267,
+    "value": "C"
+   },
+   {
+    "start": 2.267,
+    "end": 2.367,
+    "value": "A"
+   },
+   {
+    "start": 2.367,
+    "end": 2.467,
+    "value": "B"
+   },
+   {
+    "start": 2.467,
+    "end": 2.533,
+    "value": "H"
+   },
+   {
+    "start": 2.533,
+    "end": 2.6,
+    "value": "B"
+   },
+   {
+    "start": 2.6,
+    "end": 2.667,
+    "value": "E"
+   },
+   {
+    "start": 2.667,
+    "end": 2.733,
+    "value": "A"
+   },
+   {
+    "start": 2.733,
+    "end": 2.833,
+    "value": "C"
+   },
+   {
+    "start": 2.833,
+    "end": 3.033,
+    "value": "B"
+   },
+   {
+    "start": 3.033,
+    "end": 3.1,
+    "value": "F"
+   },
+   {
+    "start": 3.1,
+    "end": 3.333,
+    "value": "B"
+   },
+   {
+    "start": 3.333,
+    "end": 3.4,
+    "value": "A"
+   },
+   {
+    "start": 3.4,
+    "end": 3.467,
+    "value": "B"
+   },
+   {
+    "start": 3.467,
+    "end": 3.533,
+    "value": "H"
+   },
+   {
+    "start": 3.533,
+    "end": 3.8,
+    "value": "C"
+   },
+   {
+    "start": 3.8,
+    "end": 3.867,
+    "value": "D"
+   },
+   {
+    "start": 3.867,
+    "end": 4.133,
+    "value": "X"
+   }
+  ],
+  "cueSource": "forced-alignment",
+  "alignMethod": "phrase-by-pause",
+  "nonverbal": [],
+  "words": [
+   {
+    "text": "लाखों",
+    "start": 0.2,
+    "end": 0.63
+   },
+   {
+    "text": "रुपये",
+    "start": 0.64,
+    "end": 0.932
+   },
+   {
+    "text": "कहाँ",
+    "start": 1.009,
+    "end": 1.25
+   },
+   {
+    "text": "से",
+    "start": 1.26,
+    "end": 1.41
+   },
+   {
+    "text": "लाऊँ",
+    "start": 1.42,
+    "end": 1.69
+   },
+   {
+    "text": "ये",
+    "start": 2.123,
+    "end": 2.28
+   },
+   {
+    "text": "बिल",
+    "start": 2.28,
+    "end": 2.52
+   },
+   {
+    "text": "तो",
+    "start": 2.597,
+    "end": 2.68
+   },
+   {
+    "text": "मेरी",
+    "start": 2.68,
+    "end": 2.93
+   },
+   {
+    "text": "कुर्सी",
+    "start": 3.017,
+    "end": 3.32
+   },
+   {
+    "text": "भी",
+    "start": 3.32,
+    "end": 3.47
+   },
+   {
+    "text": "ले",
+    "start": 3.48,
+    "end": 3.65
+   },
+   {
+    "text": "गया",
+    "start": 3.65,
+    "end": 3.903
+   }
+  ]
+ },
+ "s3_friend_isiliye": {
+  "file": "audio/dialogue/s3_friend_isiliye.wav",
+  "duration": 3.538,
+  "speechStart": 0.2,
+  "speechEnd": 3.333,
+  "cues": [
+   {
+    "start": 0,
+    "end": 0.2,
+    "value": "X"
+   },
+   {
+    "start": 0.2,
+    "end": 0.533,
+    "value": "B"
+   },
+   {
+    "start": 0.533,
+    "end": 0.7,
+    "value": "C"
+   },
+   {
+    "start": 0.7,
+    "end": 0.8,
+    "value": "E"
+   },
+   {
+    "start": 0.8,
+    "end": 0.933,
+    "value": "D"
+   },
+   {
+    "start": 0.933,
+    "end": 1,
+    "value": "B"
+   },
+   {
+    "start": 1,
+    "end": 1.1,
+    "value": "D"
+   },
+   {
+    "start": 1.1,
+    "end": 1.167,
+    "value": "B"
+   },
+   {
+    "start": 1.167,
+    "end": 1.333,
+    "value": "C"
+   },
+   {
+    "start": 1.333,
+    "end": 1.667,
+    "value": "X"
+   },
+   {
+    "start": 1.667,
+    "end": 1.833,
+    "value": "B"
+   },
+   {
+    "start": 1.833,
+    "end": 1.967,
+    "value": "E"
+   },
+   {
+    "start": 1.967,
+    "end": 2.067,
+    "value": "F"
+   },
+   {
+    "start": 2.067,
+    "end": 2.2,
+    "value": "B"
+   },
+   {
+    "start": 2.2,
+    "end": 2.4,
+    "value": "D"
+   },
+   {
+    "start": 2.4,
+    "end": 2.5,
+    "value": "X"
+   },
+   {
+    "start": 2.5,
+    "end": 2.7,
+    "value": "F"
+   },
+   {
+    "start": 2.7,
+    "end": 2.767,
+    "value": "E"
+   },
+   {
+    "start": 2.767,
+    "end": 3.167,
+    "value": "B"
+   },
+   {
+    "start": 3.167,
+    "end": 3.333,
+    "value": "E"
+   },
+   {
+    "start": 3.333,
+    "end": 3.567,
+    "value": "X"
+   }
+  ],
+  "cueSource": "forced-alignment",
+  "alignMethod": "phrase-by-pause",
+  "nonverbal": [],
+  "words": [
+   {
+    "text": "इसीलिए",
+    "start": 0.211,
+    "end": 0.65
+   },
+   {
+    "text": "तो",
+    "start": 0.702,
+    "end": 0.82
+   },
+   {
+    "text": "आया",
+    "start": 0.82,
+    "end": 1.1
+   },
+   {
+    "text": "है",
+    "start": 1.11,
+    "end": 1.359
+   },
+   {
+    "text": "जियोऊर्जा",
+    "start": 1.61,
+    "end": 2.34
+   },
+   {
+    "text": "टू",
+    "start": 2.494,
+    "end": 2.659
+   },
+   {
+    "text": "पॉइंट",
+    "start": 2.69,
+    "end": 2.93
+   },
+   {
+    "text": "ज़ीरो",
+    "start": 2.93,
+    "end": 3.33
+   }
+  ]
+ },
+ "s3_owner_accha": {
+  "file": "audio/dialogue/s3_owner_accha.wav",
+  "duration": 2.122,
+  "speechStart": 0.167,
+  "speechEnd": 1.9,
+  "cues": [
+   {
+    "start": 0,
+    "end": 0.167,
+    "value": "X"
+   },
+   {
+    "start": 0.167,
+    "end": 0.3,
+    "value": "C"
+   },
+   {
+    "start": 0.3,
+    "end": 0.4,
+    "value": "X"
+   },
+   {
+    "start": 0.4,
+    "end": 0.633,
+    "value": "D"
+   },
+   {
+    "start": 0.633,
+    "end": 1.067,
+    "value": "X"
+   },
+   {
+    "start": 1.067,
+    "end": 1.167,
+    "value": "C"
+   },
+   {
+    "start": 1.167,
+    "end": 1.3,
+    "value": "X"
+   },
+   {
+    "start": 1.3,
+    "end": 1.533,
+    "value": "C"
+   },
+   {
+    "start": 1.533,
+    "end": 1.667,
+    "value": "D"
+   },
+   {
+    "start": 1.667,
+    "end": 1.8,
+    "value": "B"
+   },
+   {
+    "start": 1.8,
+    "end": 1.9,
+    "value": "D"
+   },
+   {
+    "start": 1.9,
+    "end": 2.133,
+    "value": "X"
+   }
+  ],
+  "cueSource": "forced-alignment",
+  "alignMethod": "phrase-by-pause",
+  "nonverbal": [],
+  "words": [
+   {
+    "text": "अच्छा",
+    "start": 0.187,
+    "end": 0.6
+   },
+   {
+    "text": "ये",
+    "start": 1.023,
+    "end": 1.164
+   },
+   {
+    "text": "करेगा",
+    "start": 1.275,
+    "end": 1.66
+   },
+   {
+    "text": "क्या",
+    "start": 1.71,
+    "end": 1.93
+   }
+  ]
+ },
+ "s3_friend_explain": {
+  "file": "audio/dialogue/s3_friend_explain.wav",
+  "duration": 10.014,
+  "speechStart": 0.3,
+  "speechEnd": 9.833,
+  "cues": [
+   {
+    "start": 0,
+    "end": 0.3,
+    "value": "X"
+   },
+   {
+    "start": 0.3,
+    "end": 0.467,
+    "value": "E"
+   },
+   {
+    "start": 0.467,
+    "end": 0.6,
+    "value": "C"
+   },
+   {
+    "start": 0.6,
+    "end": 0.667,
+    "value": "A"
+   },
+   {
+    "start": 0.667,
+    "end": 0.733,
+    "value": "C"
+   },
+   {
+    "start": 0.733,
+    "end": 0.833,
+    "value": "B"
+   },
+   {
+    "start": 0.833,
+    "end": 0.9,
+    "value": "F"
+   },
+   {
+    "start": 0.9,
+    "end": 1.033,
+    "value": "C"
+   },
+   {
+    "start": 1.033,
+    "end": 1.133,
+    "value": "B"
+   },
+   {
+    "start": 1.133,
+    "end": 1.367,
+    "value": "C"
+   },
+   {
+    "start": 1.367,
+    "end": 1.433,
+    "value": "B"
+   },
+   {
+    "start": 1.433,
+    "end": 1.567,
+    "value": "D"
+   },
+   {
+    "start": 1.567,
+    "end": 1.7,
+    "value": "B"
+   },
+   {
+    "start": 1.7,
+    "end": 1.8,
+    "value": "D"
+   },
+   {
+    "start": 1.8,
+    "end": 1.867,
+    "value": "B"
+   },
+   {
+    "start": 1.867,
+    "end": 1.967,
+    "value": "C"
+   },
+   {
+    "start": 1.967,
+    "end": 2.033,
+    "value": "B"
+   },
+   {
+    "start": 2.033,
+    "end": 2.533,
+    "value": "X"
+   },
+   {
+    "start": 2.533,
+    "end": 2.767,
+    "value": "B"
+   },
+   {
+    "start": 2.767,
+    "end": 2.9,
+    "value": "E"
+   },
+   {
+    "start": 2.9,
+    "end": 3.167,
+    "value": "C"
+   },
+   {
+    "start": 3.167,
+    "end": 3.267,
+    "value": "B"
+   },
+   {
+    "start": 3.267,
+    "end": 3.4,
+    "value": "E"
+   },
+   {
+    "start": 3.4,
+    "end": 3.467,
+    "value": "B"
+   },
+   {
+    "start": 3.467,
+    "end": 3.533,
+    "value": "A"
+   },
+   {
+    "start": 3.533,
+    "end": 3.967,
+    "value": "C"
+   },
+   {
+    "start": 3.967,
+    "end": 4.033,
+    "value": "B"
+   },
+   {
+    "start": 4.033,
+    "end": 4.1,
+    "value": "A"
+   },
+   {
+    "start": 4.1,
+    "end": 4.233,
+    "value": "B"
+   },
+   {
+    "start": 4.233,
+    "end": 4.3,
+    "value": "F"
+   },
+   {
+    "start": 4.3,
+    "end": 4.4,
+    "value": "C"
+   },
+   {
+    "start": 4.4,
+    "end": 4.567,
+    "value": "B"
+   },
+   {
+    "start": 4.567,
+    "end": 4.633,
+    "value": "C"
+   },
+   {
+    "start": 4.633,
+    "end": 4.7,
+    "value": "A"
+   },
+   {
+    "start": 4.7,
+    "end": 4.8,
+    "value": "D"
+   },
+   {
+    "start": 4.8,
+    "end": 4.867,
+    "value": "H"
+   },
+   {
+    "start": 4.867,
+    "end": 4.933,
+    "value": "C"
+   },
+   {
+    "start": 4.933,
+    "end": 5,
+    "value": "B"
+   },
+   {
+    "start": 5,
+    "end": 5.133,
+    "value": "D"
+   },
+   {
+    "start": 5.133,
+    "end": 5.467,
+    "value": "X"
+   },
+   {
+    "start": 5.467,
+    "end": 5.567,
+    "value": "E"
+   },
+   {
+    "start": 5.567,
+    "end": 5.767,
+    "value": "B"
+   },
+   {
+    "start": 5.767,
+    "end": 5.9,
+    "value": "E"
+   },
+   {
+    "start": 5.9,
+    "end": 6,
+    "value": "X"
+   },
+   {
+    "start": 6,
+    "end": 6.067,
+    "value": "B"
+   },
+   {
+    "start": 6.067,
+    "end": 6.2,
+    "value": "D"
+   },
+   {
+    "start": 6.2,
+    "end": 6.4,
+    "value": "B"
+   },
+   {
+    "start": 6.4,
+    "end": 6.5,
+    "value": "D"
+   },
+   {
+    "start": 6.5,
+    "end": 6.833,
+    "value": "X"
+   },
+   {
+    "start": 6.833,
+    "end": 7,
+    "value": "B"
+   },
+   {
+    "start": 7,
+    "end": 7.067,
+    "value": "A"
+   },
+   {
+    "start": 7.067,
+    "end": 7.167,
+    "value": "B"
+   },
+   {
+    "start": 7.167,
+    "end": 7.267,
+    "value": "X"
+   },
+   {
+    "start": 7.267,
+    "end": 7.333,
+    "value": "C"
+   },
+   {
+    "start": 7.333,
+    "end": 7.4,
+    "value": "A"
+   },
+   {
+    "start": 7.4,
+    "end": 7.533,
+    "value": "D"
+   },
+   {
+    "start": 7.533,
+    "end": 7.6,
+    "value": "H"
+   },
+   {
+    "start": 7.6,
+    "end": 7.767,
+    "value": "B"
+   },
+   {
+    "start": 7.767,
+    "end": 7.867,
+    "value": "F"
+   },
+   {
+    "start": 7.867,
+    "end": 7.967,
+    "value": "B"
+   },
+   {
+    "start": 7.967,
+    "end": 8.067,
+    "value": "X"
+   },
+   {
+    "start": 8.067,
+    "end": 8.167,
+    "value": "E"
+   },
+   {
+    "start": 8.167,
+    "end": 8.267,
+    "value": "H"
+   },
+   {
+    "start": 8.267,
+    "end": 8.367,
+    "value": "B"
+   },
+   {
+    "start": 8.367,
+    "end": 8.433,
+    "value": "A"
+   },
+   {
+    "start": 8.433,
+    "end": 8.733,
+    "value": "B"
+   },
+   {
+    "start": 8.733,
+    "end": 8.867,
+    "value": "D"
+   },
+   {
+    "start": 8.867,
+    "end": 8.933,
+    "value": "A"
+   },
+   {
+    "start": 8.933,
+    "end": 9.033,
+    "value": "F"
+   },
+   {
+    "start": 9.033,
+    "end": 9.133,
+    "value": "X"
+   },
+   {
+    "start": 9.133,
+    "end": 9.267,
+    "value": "D"
+   },
+   {
+    "start": 9.267,
+    "end": 9.4,
+    "value": "B"
+   },
+   {
+    "start": 9.4,
+    "end": 9.6,
+    "value": "C"
+   },
+   {
+    "start": 9.6,
+    "end": 9.667,
+    "value": "B"
+   },
+   {
+    "start": 9.667,
+    "end": 9.833,
+    "value": "C"
+   },
+   {
+    "start": 9.833,
+    "end": 10.033,
+    "value": "X"
+   }
+  ],
+  "cueSource": "forced-alignment",
+  "alignMethod": "phrase-by-pause+whisper-anchor",
+  "nonverbal": [],
+  "words": [
+   {
+    "text": "सोलर",
+    "start": 0.25,
+    "end": 0.58
+   },
+   {
+    "text": "में",
+    "start": 0.61,
+    "end": 0.74
+   },
+   {
+    "text": "निवेश",
+    "start": 0.75,
+    "end": 1.09
+   },
+   {
+    "text": "करेगा",
+    "start": 1.11,
+    "end": 1.56
+   },
+   {
+    "text": "रिलायंस",
+    "start": 1.57,
+    "end": 2.212
+   },
+   {
+    "text": "इंस्टॉलेशन",
+    "start": 2.531,
+    "end": 3.25
+   },
+   {
+    "text": "और",
+    "start": 3.297,
+    "end": 3.46
+   },
+   {
+    "text": "मेंटेनेंस",
+    "start": 3.48,
+    "end": 4.02
+   },
+   {
+    "text": "भी",
+    "start": 4.06,
+    "end": 4.23
+   },
+   {
+    "text": "वही",
+    "start": 4.24,
+    "end": 4.52
+   },
+   {
+    "text": "संभालेगा",
+    "start": 4.54,
+    "end": 5.14
+   },
+   {
+    "text": "और",
+    "start": 5.476,
+    "end": 5.64
+   },
+   {
+    "text": "योग्य",
+    "start": 5.66,
+    "end": 6.07
+   },
+   {
+    "text": "कारखाने",
+    "start": 6.07,
+    "end": 6.64
+   },
+   {
+    "text": "सिर्फ",
+    "start": 6.752,
+    "end": 7.08
+   },
+   {
+    "text": "इस्तेमाल",
+    "start": 7.08,
+    "end": 7.59
+   },
+   {
+    "text": "की",
+    "start": 7.639,
+    "end": 7.71
+   },
+   {
+    "text": "हुई",
+    "start": 7.72,
+    "end": 7.97
+   },
+   {
+    "text": "सोलर",
+    "start": 7.98,
+    "end": 8.34
+   },
+   {
+    "text": "बिजली",
+    "start": 8.38,
+    "end": 8.66
+   },
+   {
+    "text": "का",
+    "start": 8.706,
+    "end": 8.85
+   },
+   {
+    "text": "भुगतान",
+    "start": 8.85,
+    "end": 9.35
+   },
+   {
+    "text": "करेंगे",
+    "start": 9.38,
+    "end": 9.82
+   }
+  ]
+ },
+ "s4_owner_kaise": {
+  "file": "audio/dialogue/s4_owner_kaise.wav",
+  "duration": 2.672,
+  "speechStart": 0.3,
+  "speechEnd": 2.4,
+  "cues": [
+   {
+    "start": 0,
+    "end": 0.3,
+    "value": "X"
+   },
+   {
+    "start": 0.3,
+    "end": 0.533,
+    "value": "D"
+   },
+   {
+    "start": 0.533,
+    "end": 0.667,
+    "value": "B"
+   },
+   {
+    "start": 0.667,
+    "end": 1.067,
+    "value": "X"
+   },
+   {
+    "start": 1.067,
+    "end": 1.167,
+    "value": "C"
+   },
+   {
+    "start": 1.167,
+    "end": 1.433,
+    "value": "B"
+   },
+   {
+    "start": 1.433,
+    "end": 1.7,
+    "value": "X"
+   },
+   {
+    "start": 1.7,
+    "end": 1.767,
+    "value": "F"
+   },
+   {
+    "start": 1.767,
+    "end": 1.833,
+    "value": "B"
+   },
+   {
+    "start": 1.833,
+    "end": 1.933,
+    "value": "F"
+   },
+   {
+    "start": 1.933,
+    "end": 2,
+    "value": "B"
+   },
+   {
+    "start": 2,
+    "end": 2.2,
+    "value": "C"
+   },
+   {
+    "start": 2.2,
+    "end": 2.4,
+    "value": "B"
+   },
+   {
+    "start": 2.4,
+    "end": 2.7,
+    "value": "X"
+   }
+  ],
+  "cueSource": "forced-alignment",
+  "alignMethod": "phrase-by-pause+whisper-anchor",
+  "nonverbal": [],
+  "words": [
+   {
+    "text": "वाह",
+    "start": 0.252,
+    "end": 0.69
+   },
+   {
+    "text": "लेकिन",
+    "start": 1.044,
+    "end": 1.456
+   },
+   {
+    "text": "शुरू",
+    "start": 1.582,
+    "end": 1.92
+   },
+   {
+    "text": "कैसे",
+    "start": 1.97,
+    "end": 2.21
+   },
+   {
+    "text": "करूँ",
+    "start": 2.241,
+    "end": 2.46
+   }
+  ]
+ },
+ "s4_friend_steps": {
+  "file": "audio/dialogue/s4_friend_steps.wav",
+  "duration": 7.788,
+  "speechStart": 0.3,
+  "speechEnd": 7.567,
+  "cues": [
+   {
+    "start": 0,
+    "end": 0.3,
+    "value": "X"
+   },
+   {
+    "start": 0.3,
+    "end": 0.433,
+    "value": "B"
+   },
+   {
+    "start": 0.433,
+    "end": 0.5,
+    "value": "H"
+   },
+   {
+    "start": 0.5,
+    "end": 0.7,
+    "value": "B"
+   },
+   {
+    "start": 0.7,
+    "end": 0.8,
+    "value": "D"
+   },
+   {
+    "start": 0.8,
+    "end": 0.867,
+    "value": "A"
+   },
+   {
+    "start": 0.867,
+    "end": 0.967,
+    "value": "B"
+   },
+   {
+    "start": 0.967,
+    "end": 1.1,
+    "value": "C"
+   },
+   {
+    "start": 1.1,
+    "end": 1.167,
+    "value": "A"
+   },
+   {
+    "start": 1.167,
+    "end": 1.233,
+    "value": "H"
+   },
+   {
+    "start": 1.233,
+    "end": 1.367,
+    "value": "E"
+   },
+   {
+    "start": 1.367,
+    "end": 1.533,
+    "value": "B"
+   },
+   {
+    "start": 1.533,
+    "end": 1.667,
+    "value": "C"
+   },
+   {
+    "start": 1.667,
+    "end": 1.767,
+    "value": "E"
+   },
+   {
+    "start": 1.767,
+    "end": 2.167,
+    "value": "X"
+   },
+   {
+    "start": 2.167,
+    "end": 2.233,
+    "value": "C"
+   },
+   {
+    "start": 2.233,
+    "end": 2.367,
+    "value": "D"
+   },
+   {
+    "start": 2.367,
+    "end": 2.567,
+    "value": "B"
+   },
+   {
+    "start": 2.567,
+    "end": 2.7,
+    "value": "C"
+   },
+   {
+    "start": 2.7,
+    "end": 2.833,
+    "value": "X"
+   },
+   {
+    "start": 2.833,
+    "end": 3.233,
+    "value": "B"
+   },
+   {
+    "start": 3.233,
+    "end": 3.3,
+    "value": "C"
+   },
+   {
+    "start": 3.3,
+    "end": 3.4,
+    "value": "A"
+   },
+   {
+    "start": 3.4,
+    "end": 3.467,
+    "value": "B"
+   },
+   {
+    "start": 3.467,
+    "end": 3.6,
+    "value": "F"
+   },
+   {
+    "start": 3.6,
+    "end": 3.7,
+    "value": "E"
+   },
+   {
+    "start": 3.7,
+    "end": 4.167,
+    "value": "X"
+   },
+   {
+    "start": 4.167,
+    "end": 4.3,
+    "value": "D"
+   },
+   {
+    "start": 4.3,
+    "end": 4.533,
+    "value": "B"
+   },
+   {
+    "start": 4.533,
+    "end": 4.667,
+    "value": "E"
+   },
+   {
+    "start": 4.667,
+    "end": 4.867,
+    "value": "B"
+   },
+   {
+    "start": 4.867,
+    "end": 4.933,
+    "value": "C"
+   },
+   {
+    "start": 4.933,
+    "end": 5.1,
+    "value": "B"
+   },
+   {
+    "start": 5.1,
+    "end": 5.4,
+    "value": "C"
+   },
+   {
+    "start": 5.4,
+    "end": 5.467,
+    "value": "F"
+   },
+   {
+    "start": 5.467,
+    "end": 5.633,
+    "value": "D"
+   },
+   {
+    "start": 5.633,
+    "end": 5.7,
+    "value": "E"
+   },
+   {
+    "start": 5.7,
+    "end": 6,
+    "value": "X"
+   },
+   {
+    "start": 6,
+    "end": 6.167,
+    "value": "E"
+   },
+   {
+    "start": 6.167,
+    "end": 6.3,
+    "value": "X"
+   },
+   {
+    "start": 6.3,
+    "end": 6.4,
+    "value": "B"
+   },
+   {
+    "start": 6.4,
+    "end": 6.467,
+    "value": "H"
+   },
+   {
+    "start": 6.467,
+    "end": 6.533,
+    "value": "C"
+   },
+   {
+    "start": 6.533,
+    "end": 6.633,
+    "value": "B"
+   },
+   {
+    "start": 6.633,
+    "end": 6.7,
+    "value": "F"
+   },
+   {
+    "start": 6.7,
+    "end": 6.8,
+    "value": "D"
+   },
+   {
+    "start": 6.8,
+    "end": 6.967,
+    "value": "E"
+   },
+   {
+    "start": 6.967,
+    "end": 7.133,
+    "value": "X"
+   },
+   {
+    "start": 7.133,
+    "end": 7.367,
+    "value": "E"
+   },
+   {
+    "start": 7.367,
+    "end": 7.467,
+    "value": "C"
+   },
+   {
+    "start": 7.467,
+    "end": 7.567,
+    "value": "B"
+   },
+   {
+    "start": 7.567,
+    "end": 7.8,
+    "value": "X"
+   }
+  ],
+  "cueSource": "forced-alignment",
+  "alignMethod": "phrase-by-pause",
+  "nonverbal": [],
+  "words": [
+   {
+    "text": "बिजली",
+    "start": 0.25,
+    "end": 0.6
+   },
+   {
+    "text": "का",
+    "start": 0.65,
+    "end": 0.79
+   },
+   {
+    "text": "बिल",
+    "start": 0.79,
+    "end": 0.96
+   },
+   {
+    "text": "अपलोड",
+    "start": 1,
+    "end": 1.44
+   },
+   {
+    "text": "करो",
+    "start": 1.501,
+    "end": 1.787
+   },
+   {
+    "text": "एआई",
+    "start": 2.167,
+    "end": 2.49
+   },
+   {
+    "text": "से",
+    "start": 2.5,
+    "end": 2.7
+   },
+   {
+    "text": "सही",
+    "start": 2.71,
+    "end": 3.01
+   },
+   {
+    "text": "सिस्टम",
+    "start": 3.03,
+    "end": 3.389
+   },
+   {
+    "text": "चुनो",
+    "start": 3.43,
+    "end": 3.697
+   },
+   {
+    "text": "साइट",
+    "start": 4.14,
+    "end": 4.47
+   },
+   {
+    "text": "और",
+    "start": 4.537,
+    "end": 4.7
+   },
+   {
+    "text": "क्रेडिट",
+    "start": 4.764,
+    "end": 5.1
+   },
+   {
+    "text": "चेक",
+    "start": 5.11,
+    "end": 5.267
+   },
+   {
+    "text": "करवाओ",
+    "start": 5.298,
+    "end": 5.72
+   },
+   {
+    "text": "और",
+    "start": 6.003,
+    "end": 6.13
+   },
+   {
+    "text": "फिर",
+    "start": 6.24,
+    "end": 6.39
+   },
+   {
+    "text": "लगवाओ",
+    "start": 6.41,
+    "end": 6.96
+   },
+   {
+    "text": "सोलर",
+    "start": 6.97,
+    "end": 7.608
+   }
+  ]
+ },
+ "s5_bill_kursi": {
+  "file": "audio/dialogue/s5_bill_kursi.wav",
+  "duration": 2.258,
+  "speechStart": 0.2,
+  "speechEnd": 2.033,
+  "cues": [
+   {
+    "start": 0,
+    "end": 0.2,
+    "value": "X"
+   },
+   {
+    "start": 0.2,
+    "end": 0.633,
+    "value": "E"
+   },
+   {
+    "start": 0.633,
+    "end": 0.733,
+    "value": "B"
+   },
+   {
+    "start": 0.733,
+    "end": 1.267,
+    "value": "X"
+   },
+   {
+    "start": 1.267,
+    "end": 1.367,
+    "value": "C"
+   },
+   {
+    "start": 1.367,
+    "end": 1.633,
+    "value": "B"
+   },
+   {
+    "start": 1.633,
+    "end": 1.7,
+    "value": "F"
+   },
+   {
+    "start": 1.7,
+    "end": 2.033,
+    "value": "B"
+   },
+   {
+    "start": 2.033,
+    "end": 2.267,
+    "value": "X"
+   }
+  ],
+  "cueSource": "forced-alignment",
+  "alignMethod": "phrase-by-pause",
+  "nonverbal": [],
+  "words": [
+   {
+    "text": "तो",
+    "start": 0.199,
+    "end": 0.49
+   },
+   {
+    "text": "मेरी",
+    "start": 1.234,
+    "end": 1.55
+   },
+   {
+    "text": "कुर्सी",
+    "start": 1.641,
+    "end": 2.04
+   }
+  ]
+ },
+ "s5_owner_dhoondh": {
+  "file": "audio/dialogue/s5_owner_dhoondh.wav",
+  "duration": 2.962,
+  "speechStart": 0.233,
+  "speechEnd": 2.667,
+  "cues": [
+   {
+    "start": 0,
+    "end": 0.233,
+    "value": "X"
+   },
+   {
+    "start": 0.233,
+    "end": 0.433,
+    "value": "B"
+   },
+   {
+    "start": 0.433,
+    "end": 0.533,
+    "value": "X"
+   },
+   {
+    "start": 0.533,
+    "end": 0.6,
+    "value": "D"
+   },
+   {
+    "start": 0.6,
+    "end": 0.733,
+    "value": "X"
+   },
+   {
+    "start": 0.733,
+    "end": 0.8,
+    "value": "C"
+   },
+   {
+    "start": 0.8,
+    "end": 1.367,
+    "value": "X"
+   },
+   {
+    "start": 1.367,
+    "end": 1.667,
+    "value": "C"
+   },
+   {
+    "start": 1.667,
+    "end": 1.767,
+    "value": "X"
+   },
+   {
+    "start": 1.767,
+    "end": 1.9,
+    "value": "B"
+   },
+   {
+    "start": 1.9,
+    "end": 2.033,
+    "value": "X"
+   },
+   {
+    "start": 2.033,
+    "end": 2.1,
+    "value": "F"
+   },
+   {
+    "start": 2.1,
+    "end": 2.433,
+    "value": "B"
+   },
+   {
+    "start": 2.433,
+    "end": 2.667,
+    "value": "F"
+   },
+   {
+    "start": 2.667,
+    "end": 2.967,
+    "value": "X"
+   }
+  ],
+  "cueSource": "forced-alignment",
+  "alignMethod": "phrase-by-pause+laugh-chunk",
+  "nonverbal": [
+   [
+    0.21,
+    0.97
+   ]
+  ],
+  "words": [
+   {
+    "text": "अब",
+    "start": 1.17,
+    "end": 1.277
+   },
+   {
+    "text": "अपनी",
+    "start": 1.365,
+    "end": 1.91
+   },
+   {
+    "text": "कुर्सी",
+    "start": 2.03,
+    "end": 2.38
+   },
+   {
+    "text": "ढूँढ",
+    "start": 2.38,
+    "end": 2.7
+   }
+  ]
+ },
+ "s5_friend_tagline": {
+  "file": "audio/dialogue/s5_friend_tagline.wav",
+  "duration": 5.068,
+  "speechStart": 0.3,
+  "speechEnd": 4.733,
+  "cues": [
+   {
+    "start": 0,
+    "end": 0.3,
+    "value": "X"
+   },
+   {
+    "start": 0.3,
+    "end": 0.467,
+    "value": "B"
+   },
+   {
+    "start": 0.467,
+    "end": 0.567,
+    "value": "E"
+   },
+   {
+    "start": 0.567,
+    "end": 0.733,
+    "value": "F"
+   },
+   {
+    "start": 0.733,
+    "end": 1,
+    "value": "B"
+   },
+   {
+    "start": 1,
+    "end": 1.067,
+    "value": "D"
+   },
+   {
+    "start": 1.067,
+    "end": 1.233,
+    "value": "X"
+   },
+   {
+    "start": 1.233,
+    "end": 1.333,
+    "value": "F"
+   },
+   {
+    "start": 1.333,
+    "end": 1.467,
+    "value": "X"
+   },
+   {
+    "start": 1.467,
+    "end": 1.633,
+    "value": "B"
+   },
+   {
+    "start": 1.633,
+    "end": 1.8,
+    "value": "X"
+   },
+   {
+    "start": 1.8,
+    "end": 2.033,
+    "value": "B"
+   },
+   {
+    "start": 2.033,
+    "end": 2.1,
+    "value": "E"
+   },
+   {
+    "start": 2.1,
+    "end": 2.6,
+    "value": "X"
+   },
+   {
+    "start": 2.6,
+    "end": 2.867,
+    "value": "E"
+   },
+   {
+    "start": 2.867,
+    "end": 3,
+    "value": "C"
+   },
+   {
+    "start": 3,
+    "end": 3.067,
+    "value": "B"
+   },
+   {
+    "start": 3.067,
+    "end": 3.233,
+    "value": "D"
+   },
+   {
+    "start": 3.233,
+    "end": 3.333,
+    "value": "E"
+   },
+   {
+    "start": 3.333,
+    "end": 3.5,
+    "value": "D"
+   },
+   {
+    "start": 3.5,
+    "end": 3.633,
+    "value": "E"
+   },
+   {
+    "start": 3.633,
+    "end": 3.733,
+    "value": "X"
+   },
+   {
+    "start": 3.733,
+    "end": 3.9,
+    "value": "B"
+   },
+   {
+    "start": 3.9,
+    "end": 4.1,
+    "value": "X"
+   },
+   {
+    "start": 4.1,
+    "end": 4.2,
+    "value": "C"
+   },
+   {
+    "start": 4.2,
+    "end": 4.367,
+    "value": "B"
+   },
+   {
+    "start": 4.367,
+    "end": 4.533,
+    "value": "F"
+   },
+   {
+    "start": 4.533,
+    "end": 4.633,
+    "value": "X"
+   },
+   {
+    "start": 4.633,
+    "end": 4.733,
+    "value": "D"
+   },
+   {
+    "start": 4.733,
+    "end": 5.1,
+    "value": "X"
+   }
+  ],
+  "cueSource": "forced-alignment",
+  "alignMethod": "phrase-by-pause+whisper-anchor",
+  "nonverbal": [],
+  "words": [
+   {
+    "text": "जियोऊर्जा",
+    "start": 0.257,
+    "end": 1.149
+   },
+   {
+    "text": "टू",
+    "start": 1.2,
+    "end": 1.369
+   },
+   {
+    "text": "पॉइंट",
+    "start": 1.42,
+    "end": 1.7
+   },
+   {
+    "text": "ज़ीरो",
+    "start": 1.72,
+    "end": 2.202
+   },
+   {
+    "text": "छोटे",
+    "start": 2.547,
+    "end": 3
+   },
+   {
+    "text": "कारोबारों",
+    "start": 3.04,
+    "end": 3.649
+   },
+   {
+    "text": "की",
+    "start": 3.719,
+    "end": 3.88
+   },
+   {
+    "text": "बड़ी",
+    "start": 3.88,
+    "end": 4.34
+   },
+   {
+    "text": "ऊर्जा",
+    "start": 4.39,
+    "end": 4.79
+   }
+  ]
+ }
+}

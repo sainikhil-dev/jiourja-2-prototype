@@ -6,7 +6,7 @@ import { CharacterSheet } from '../src/scenes/CharacterSheet';
 import { FPS } from '../src/timeline/beats';
 
 const COMPS = {
-  Preview10s: { component: Scene1Boss, frames: S1.__total.end, label: 'Scene 1 preview (≈10 s)' },
+  Scene1: { component: Scene1Boss, frames: S1.__total.end, label: 'Scene 1 (voiced)' },
   CharacterSheet: { component: CharacterSheet, frames: 240, label: 'Character model sheet' },
 } as const;
 type CompId = keyof typeof COMPS;
@@ -20,7 +20,7 @@ const tc = (f: number) => `${(f / FPS).toFixed(2)} s · f${f}`;
 
 const App: React.FC = () => {
   const ref = useRef<PlayerRef>(null);
-  const [comp, setComp] = useState<CompId>('Preview10s');
+  const [comp, setComp] = useState<CompId>('Scene1');
   const [frame, setFrame] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [overlay, setOverlay] = useState(true);

@@ -1,73 +1,97 @@
 /**
- * SCENE 1 — THE REAL BOSS (≈10 s)
+ * SCENE 1 — THE ELECTRICITY BILL ENTERS
  *
  *  A  wide      factory hums; Raju carries a crate; Pappu on the lathe; Khurana ji content
  *  —            lights flicker, machines die, every head turns to the shutter
  *  B  door      shutter rattles… SLAMS up (DUN!) → silhouette → sunglasses glint (DUN!)
  *  C  wide/low  BOOM — the Bill steps in (DUNNN!); everyone snaps to attention, crate drops
- *  D  two-shot  his shadow climbs the wall. Raju: "सर... ये कौन है?"
- *               Owner (gulp): "हमारी फैक्टरी का... असली मालिक!"
- *  E  the chair the Bill strolls to THE chair, hops, plops, spins, crosses his legs. Glint.
+ *  D  chair     he strolls to THE chair, hops, plops, spins, crosses his legs. Glint.
+ *  E  two-shot  Owner: "अरे! मेरी कुर्सी पर ये कौन बैठ गया?"
+ *  F  close     Bill: [laughs] "मैं हूँ... बिजली का बिल! मशीनें तुम्हारी... मेहनत तुम्हारी...
+ *               लेकिन कमाई मेरी!" — and on "मेरी!" he GROWS. ₹8–14/unit slams in.
+ *  G  wide      Owner: "ये बिजली का बिल है... या वसूली गैंग?" Workers swap terrified looks.
  *
- * Every key below is relative to a beat, so real voice takes re-time it.
+ * Gestures are keyed to measured word times (wordAt), mouths to the aligned
+ * phones (mouthFor), so the acting follows the recorded voice.
  */
 import React from 'react';
 import { AbsoluteFill, useCurrentFrame } from 'remotion';
-import { World, Layer, camAt, type CamKey } from '../camera/Camera';
-import { BackWall, Crates, DoorLight, DoorOutside, Drill, Desk, Floor, Lathe, Press, Roof, RollerDoor, FLOOR } from '../environment/Factory';
-import { ChairBack, ChairFront, BASE_CHAIR, SEAT_Y, CHAIR_SCALE, type ChairState } from '../environment/Chair';
-import { Owner } from '../characters/Owner';
-import { Raju, Pappu } from '../characters/Workers';
-import { Bill, BASE_BILL, billWalk, type BillPose } from '../characters/Bill';
+import { camAt, type CamKey } from '../camera/Camera';
+import { FLOOR } from '../environment/Factory';
+import { BASE_CHAIR, type ChairState } from '../environment/Chair';
+import { BASE_BILL, billWalk, type BillPose } from '../characters/Bill';
 import { BASE_HUMAN, walkPose, type HumanPose } from '../characters/Human';
 import { animatePose, blink, kf, type Key } from '../rig/keyframes';
-import { mouthFor, resolveBeats, type Resolved } from '../timeline/beats';
+import { isLaughing, mouthFor, resolveBeats, wordAt, type Resolved } from '../timeline/beats';
 import { SCENE1_BEATS } from '../timeline/scene1';
 import { Soundtrack, type Sfx, type MusicCue } from '../audio/Soundtrack';
 import { ScratchOverlay } from './ScratchOverlay';
-import type { Viseme } from '../audio/visemes';
+import { Stage } from './Stage';
+import { BILL_BIG, BILL_SCALE, CHAIR_X, POS, applyTalk, billSeatY, lightsOn, seatedLeg } from './common';
+import { FONT } from '../fonts';
 import { loadFonts } from '../fonts';
 
 loadFonts();
 
 export const S1 = resolveBeats(SCENE1_BEATS);
-const BILL_SCALE = 1.08;
 const STEP = 14; // frames per Bill footstep
 const STRIDE = 46;
 const BILL_SPEED = (2 * STRIDE * BILL_SCALE) / STEP;
-const CHAIR_X = 1880;
-const POS = { pappu: 1010, raju: 2120, owner: 2330, door: 310 };
-
-const talk = (v: Viseme) => (v === 'D' || v === 'C' ? 2.5 : v === 'E' ? 1.5 : 0);
 
 export function scene1Timing(B: Resolved) {
+  const L2 = B.l2;
   return {
     PD: B.powerDown.start,
     RT: B.rattle.start,
     BU: B.burst.start,
     ST: B.steps.start,
-    QS: B.raju_q.start,
-    Q: B.raju_q.line!.speechStart,
-    QE: B.raju_q.line!.speechEnd,
-    A: B.owner_a.line!.speechStart,
-    AE: B.owner_a.line!.speechEnd,
     SIT: B.sit.start,
+    L1: B.l1.line!,
+    L2: L2.line!,
+    L3: B.l3.line!,
+    GROW: wordAt(L2, 11), // "मेरी!"
     END: B.__total.end,
   };
 }
 
-function lightsOn(f: number, PD: number, BU: number) {
-  if (f < PD) return 1;
-  if (f >= BU) return 0.8;
-  const pattern = [0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0];
-  return pattern[Math.min(pattern.length - 1, f - PD)] ?? 0;
-}
+/** Bill's scale through the scene (he grows on "…कमाई मेरी!"). */
+export const billScaleS1 = (f: number, B: Resolved) => {
+  const { GROW } = scene1Timing(B);
+  return kf(f, [[GROW - 2, BILL_SCALE], [GROW + 9, BILL_BIG, 'back']]);
+};
 
-export const Scene1Boss: React.FC<{ scratchOverlay?: boolean }> = ({ scratchOverlay = true }) => {
+/** Final state of the scene, handed to Scene 2 for continuity. */
+export const S1_END = { billScale: BILL_BIG };
+
+export const TariffStamp: React.FC<{ t: number }> = ({ t }) => {
+  // t: frames since it slammed in
+  if (t < 0 || t > 36) return null;
+  const s = t < 5 ? 1.8 - (t / 5) * 0.8 : 1;
+  const o = t > 28 ? (36 - t) / 8 : 1;
+  return (
+    <g transform={`translate(1430 300) rotate(-9) scale(${s})`} opacity={o}>
+      <rect x={-250} y={-92} width={500} height={184} rx={18} fill="#FFF7E6" stroke="#C62828" strokeWidth={12} />
+      <text x={0} y={22} textAnchor="middle" fontFamily={FONT} fontWeight={800} fontSize={96} fill="#C62828">
+        ₹8–14
+      </text>
+      <text x={0} y={72} textAnchor="middle" fontFamily={FONT} fontWeight={800} fontSize={36} fill="#C62828">
+        प्रति यूनिट
+      </text>
+      <text x={0} y={128} textAnchor="middle" fontFamily={FONT} fontWeight={700} fontSize={22} fill="#FFF7E6" stroke="#2A1A14" strokeWidth={5} paintOrder="stroke">
+        illustrative commercial tariff range
+      </text>
+    </g>
+  );
+};
+
+export const Scene1Boss: React.FC<{ scratchOverlay?: boolean; withMusic?: boolean }> = ({ scratchOverlay = false, withMusic = true }) => {
   const f = useCurrentFrame();
   const B = S1;
-  const { PD, RT, BU, ST, QS, Q, QE, A, AE, SIT, END } = scene1Timing(B);
-  const booms = [ST, ST + STEP, ST + 2 * STEP, SIT + 6, SIT + 18];
+  const { PD, RT, BU, ST, SIT, L1, L2, L3, GROW, END } = scene1Timing(B);
+  const w1 = (n: number) => wordAt(B.l1, n);
+  const w2 = (n: number) => wordAt(B.l2, n);
+  const w3 = (n: number) => wordAt(B.l3, n);
+  const booms = [ST, ST + STEP, SIT + 6];
 
   // -------------------------------------------------------------- camera
   const camKeys: CamKey[] = [
@@ -76,38 +100,39 @@ export const Scene1Boss: React.FC<{ scratchOverlay?: boolean }> = ({ scratchOver
     { f: RT, x: 340, y: 460, zoom: 1.0, e: 'hold' }, // CUT → door
     { f: ST - 1, x: 330, y: 470, zoom: 1.12, e: 'inOut' },
     { f: ST, x: 1150, y: 500, zoom: 0.78, e: 'hold' }, // CUT → wide low
-    { f: QS - 1, x: 1230, y: 500, zoom: 0.8, e: 'linear' },
-    { f: QS, x: 2200, y: 560, zoom: 1.72, e: 'hold' }, // CUT → two-shot
-    { f: A, x: 2215, y: 560, zoom: 1.76, e: 'linear' },
-    { f: AE + 4, x: 2270, y: 555, zoom: 1.95, e: 'inOut' },
+    { f: SIT - 1, x: 1220, y: 500, zoom: 0.8, e: 'linear' },
     { f: SIT, x: 2030, y: 440, zoom: 0.84, e: 'hold' }, // CUT → the chair
-    { f: SIT + 30, x: 2020, y: 440, zoom: 0.87, e: 'inOut' },
-    { f: END, x: 1990, y: 450, zoom: 0.93, e: 'inOut' },
+    { f: L1.speechStart - 3, x: 2010, y: 450, zoom: 0.9, e: 'inOut' },
+    { f: L1.speechStart - 2, x: 2120, y: 400, zoom: 1.04, e: 'hold' }, // CUT → two-shot (owner + Bill)
+    { f: L1.speechEnd, x: 2140, y: 400, zoom: 1.08, e: 'linear' },
+    { f: L1.speechEnd + 1, x: 1880, y: 290, zoom: 1.42, e: 'hold' }, // CUT → Bill close-up
+    { f: GROW - 5, x: 1890, y: 300, zoom: 1.5, e: 'linear' },
+    { f: GROW - 4, x: 2060, y: 350, zoom: 0.88, e: 'hold' }, // CUT → medium wide: watch him grow
+    { f: L3.speechStart - 4, x: 2070, y: 400, zoom: 0.95, e: 'out' },
+    { f: L3.speechStart - 3, x: 1650, y: 470, zoom: 0.8, e: 'hold' }, // CUT → wide reaction
+    { f: END, x: 1700, y: 470, zoom: 0.86, e: 'inOut' },
   ];
   const cam = camAt(
     f,
     camKeys,
-    booms.map((b, i) => ({ f: b, s: i === 0 ? 26 : i < 3 ? 16 : 10, d: 16 })).concat([{ f: BU, s: 12, d: 10 }, { f: SIT + 34, s: 9, d: 10 }]),
+    booms.map((b, i) => ({ f: b, s: i === 0 ? 26 : 14, d: 16 })).concat([{ f: BU, s: 12, d: 10 }, { f: SIT + 27, s: 9, d: 10 }, { f: GROW, s: 16, d: 16 }]),
   );
-
-  const lit = lightsOn(f, PD, BU);
-  const running = f < PD + 4 ? 1 : 0;
 
   // -------------------------------------------------------------- Bill
   let billX = POS.door;
   let walkPh: number | null = null;
-  if (f >= ST && f < QS) {
+  if (f >= ST && f < SIT) {
     walkPh = (f - ST) / STEP;
     billX = POS.door + (f - ST) * BILL_SPEED;
-  } else if (f >= QS && f < SIT) {
-    billX = POS.door + (QS - ST) * BILL_SPEED;
   } else if (f >= SIT) {
-    const t = Math.min(f - SIT, 18);
-    walkPh = f - SIT < 18 ? 0.5 + t / (STEP * 0.857) : null;
-    billX = CHAIR_X - 150 + Math.min(1, t / 18) * 150;
+    const t = Math.min(f - SIT, 12);
+    walkPh = f - SIT < 12 ? 0.5 + t / 12 : null;
+    billX = CHAIR_X - 110 + (t / 12) * 110;
   }
-  const seatY = SEAT_Y - 40 * CHAIR_SCALE + 150 * BILL_SCALE;
-  const SEATED_LEG = (FLOOR - (seatY - 150 * BILL_SCALE)) / BILL_SCALE;
+  const scale = billScaleS1(f, B);
+  const seatY = billSeatY(scale);
+  const LEG = seatedLeg(scale);
+  const laughing = isLaughing('bill', f, B);
   const billKeys: Key<BillPose>[] = [
     // in the doorway: arms akimbo, chest out
     { f: 0, aLa: 12, aLl: 125, aLb: -0.95, aRa: 12, aRl: 125, aRb: -0.95, hL: 'fist', hR: 'fist', lean: -2, smile: 0.35, asym: 0.6, browAng: 0.5, turn: 0.1 },
@@ -115,23 +140,56 @@ export const Scene1Boss: React.FC<{ scratchOverlay?: boolean }> = ({ scratchOver
     { f: BU + 15, turn: 0.35, browR: 0.8, glint: 1, smile: 0.55, e: 'back' }, // DUN #2: the glint
     { f: BU + 24, glint: 0, e: 'out' },
     { f: ST - 2, aLa: 12, aLl: 125, aLb: -0.95, aRa: 12, aRl: 125, aRb: -0.95, browR: 0.5 },
-    // walk: let the swagger drive the arms
     { f: ST, aLl: 185, aRl: 185, hL: 'relax', hR: 'relax', turn: 0.45, smile: 0.5, asym: 0.8, e: 'out' },
-    { f: QS - 1, turn: 0.45 },
     // the chair
-    { f: SIT, turn: 0.6, smile: 0.45, asym: 0.7, browAng: 0.5, y: FLOOR, sy: 1, bodyY: 0 },
-    { f: SIT + 18, turn: 0.6, aLa: 22, aRa: 22, aLb: 0.3, aRb: 0.3 },
-    { f: SIT + 22, turn: 0, lookX: 0, browR: 0.9, e: 'back' }, // turns to camera, "watch this"
-    { f: SIT + 27, sy: 0.86, sx: 1.06, bodyY: -12, aLa: 50, aRa: 50, aLb: -0.4, aRb: -0.4, lLx: -20, lLy: 140, lRx: 20, lRy: 140, e: 'out' }, // anticipation
-    { f: SIT + 33, y: seatY - 70, sy: 1.1, sx: 0.94, bodyY: 0, aLa: 95, aRa: 95, lLx: 30, lLy: 120, lRx: 40, lRy: 110, lLk: 0.5, lRk: 0.5, e: 'out' }, // hop
-    { f: SIT + 36, y: seatY, sy: 0.8, sx: 1.14, aLa: 40, aRa: 40, lLx: -40, lLy: SEATED_LEG, lRx: 40, lRy: SEATED_LEG, lLk: -0.25, lRk: 0.25, e: 'in' }, // PLOP
-    { f: SIT + 44, sy: 1, sx: 1, e: 'elastic' },
-    // spin, then settle into the boss pose: legs crossed, arms behind head
-    { f: SIT + 46, aLa: 40, aRa: 40, aLb: 0.3, aRb: 0.3, lRx: 40, lRy: SEATED_LEG, lRk: 0.25, lean: 0 },
-    { f: SIT + 54, aLa: 205, aRa: 205, aLb: -1.6, aRb: -1.6, aLl: 190, aRl: 190, hL: 'flat', hR: 'flat', lRx: -170, lRy: SEATED_LEG * 0.42, lRk: 0.7, lean: -5, smile: 0.7, asym: 0.9, browAng: 0.35, e: 'back' },
-    { f: SIT + 55, glint: 0 },
-    { f: SIT + 57, glint: 1, e: 'back' },
-    { f: END, glint: 0, e: 'out' },
+    { f: SIT, turn: 0.6, smile: 0.45, asym: 0.7, browAng: 0.5, y: FLOOR, sy: 1, bodyY: 0, aLa: 22, aRa: 22, aLb: 0.3, aRb: 0.3 },
+    { f: SIT + 16, turn: 0, lookX: 0, browR: 0.9, e: 'back' }, // turns to camera, "watch this"
+    { f: SIT + 20, sy: 0.86, sx: 1.06, bodyY: -12, aLa: 50, aRa: 50, aLb: -0.4, aRb: -0.4, lLx: -20, lLy: 140, lRx: 20, lRy: 140, e: 'out' }, // anticipation
+    { f: SIT + 26, y: seatY - 70, sy: 1.1, sx: 0.94, bodyY: 0, aLa: 95, aRa: 95, lLx: 30, lLy: 120, lRx: 40, lRy: 110, lLk: 0.5, lRk: 0.5, e: 'out' }, // hop
+    { f: SIT + 29, y: seatY, sy: 0.8, sx: 1.14, aLa: 40, aRa: 40, lLx: -40, lLy: LEG, lRx: 40, lRy: LEG, lLk: -0.25, lRk: 0.25, e: 'in' }, // PLOP
+    { f: SIT + 37, sy: 1, sx: 1, e: 'elastic' },
+    // spin, then the boss pose: legs crossed, arms behind the head
+    { f: SIT + 38, aLa: 40, aRa: 40, aLb: 0.3, aRb: 0.3, lRx: 40, lRy: LEG, lRk: 0.25, lean: 0 },
+    { f: SIT + 46, aLa: 205, aRa: 205, aLb: -1.6, aRb: -1.6, aLl: 190, aRl: 190, hL: 'flat', hR: 'flat', lRx: -170, lRy: LEG * 0.42, lRk: 0.7, lean: -5, smile: 0.7, asym: 0.9, browAng: 0.35, e: 'back' },
+    { f: SIT + 47, glint: 0 },
+    { f: SIT + 49, glint: 1, e: 'back' },
+    { f: SIT + 58, glint: 0, e: 'out' },
+    // owner asks who he is: smug side-eye, one brow up
+    { f: L1.speechStart, turn: 0, lookX: 0, browR: 0.9, browL: 0 },
+    { f: L1.speechStart + 8, turn: 0.5, lookX: 0.8, browR: 1, browL: -0.2, smile: 0.8, e: 'inOut' },
+    { f: L2.speechStart - 1, aLa: 205, aRa: 205, aLb: -1.6, aRb: -1.6, aLl: 190, aRl: 190, lean: -5, turn: 0.5 },
+    // [laughs]: head back, arms swing out from behind the head
+    { f: L2.speechStart + 6, aLa: 70, aRa: 70, aLb: -0.6, aRb: -0.6, aLl: 185, aRl: 185, hL: 'open', hR: 'open', lean: -9, turn: 0.1, lookX: 0, lookY: -0.6, e: 'out' },
+    // "मैं हूँ..." — thumb to his own chest
+    { f: w2(0) - 3, aRa: 70, aRb: -0.6, hR: 'open', lean: -9, lookY: -0.6 },
+    { f: w2(0) + 2, aRa: -48, aRl: 150, aRb: 0.6, aRw: 10, hR: 'thumb', lean: -3, lookY: 0, smile: 0.6, browAng: 0.6, e: 'back' },
+    // "बिजली का बिल!" — presents himself, arms wide, glint on "बिल"
+    { f: w2(2) - 2, aLa: 70, aRa: -48, aRl: 150 },
+    { f: w2(2) + 4, aLa: 120, aRa: 120, aLb: -0.2, aRb: -0.2, aRl: 185, aRw: 0, hL: 'open', hR: 'open', lean: -6, turn: 0, smile: 0.9, e: 'back' },
+    { f: w2(4) - 1, glint: 0 },
+    { f: w2(4) + 2, glint: 1, e: 'back' },
+    { f: w2(4) + 12, glint: 0, e: 'out' },
+    // "मशीनें तुम्हारी..." — points at the machines (screen-left)
+    { f: w2(5) - 3, aLa: 120, aRa: 120, turn: 0, lookX: 0 },
+    { f: w2(5) + 3, aLa: 96, aLb: 0.05, aLw: 0, hL: 'point', aRa: 30, aRb: 0.3, hR: 'relax', turn: -0.6, lookX: -1, lean: -2, e: 'back' },
+    // "मेहनत तुम्हारी..." — points at the owner (screen-right)
+    { f: w2(7) - 3, aLa: 96, aRa: 30, turn: -0.6, lookX: -1 },
+    { f: w2(7) + 3, aRa: 96, aRb: 0.05, hR: 'point', aLa: 30, aLb: 0.3, hL: 'relax', turn: 0.6, lookX: 1, e: 'back' },
+    // "लेकिन कमाई..." — rubs his fingers, money gesture, leaning in
+    { f: w2(9) - 3, aRa: 96, aLa: 30, turn: 0.6, lean: -2 },
+    { f: w2(9) + 4, aLa: -30, aRa: -30, aLl: 150, aRl: 150, aLb: 0.5, aRb: 0.5, hL: 'fist', hR: 'fist', turn: 0, lookX: 0, lean: 4, browAng: 0.9, smile: 0.5, e: 'out' },
+    // "मेरी!" — thumbs to chest, and he GROWS
+    { f: GROW - 2, aLa: -30, aRa: -30, lean: 4 },
+    { f: GROW + 4, aLa: -50, aRa: -50, aLl: 150, aRl: 150, aLb: 0.6, aRb: 0.6, hL: 'thumb', hR: 'thumb', lean: -7, smile: 1, asym: 1, browAng: 0.3, browL: 0.8, browR: 0.8, e: 'back' },
+    { f: GROW + 9, glint: 0 },
+    { f: GROW + 12, glint: 1, e: 'back' },
+    { f: GROW + 22, glint: 0, e: 'out' },
+    // owner's outburst: smug, arms back behind the head is not needed — arms folded on the paper
+    { f: L3.speechStart - 4, aLa: -50, aRa: -50, lean: -7, turn: 0 },
+    { f: L3.speechStart + 6, aLa: 30, aRa: 30, aLl: 185, aRl: 185, aLb: 0.4, aRb: 0.4, hL: 'relax', hR: 'relax', lean: -4, turn: 0.4, lookX: 0.6, smile: 0.7, e: 'inOut' },
+    { f: w3(6), browR: 1, glint: 0 },
+    { f: w3(6) + 3, glint: 0.9, e: 'back' },
+    { f: w3(6) + 14, glint: 0, e: 'out' },
   ];
   let billP = animatePose(f, { ...BASE_BILL, x: billX, y: FLOOR, scale: BILL_SCALE }, billKeys);
   if (walkPh !== null) {
@@ -139,32 +197,46 @@ export const Scene1Boss: React.FC<{ scratchOverlay?: boolean }> = ({ scratchOver
     billP = { ...billP, ...w, aLa: (w.aLa ?? 0) + 4, aRa: (w.aRa ?? 0) + 4 };
   }
   billP.x = billX;
+  billP.scale = scale;
+  if (f >= SIT + 29) {
+    billP.y = seatY;
+    if (billP.lLy > 200) billP.lLy = LEG;
+  }
   billP.stache = Math.sin(f / 7) * 0.3;
-  const billSil = f < ST ? 1 : kf(f, [[ST, 1], [ST + 14, 0, 'out']]);
-  const spinT = kf(f, [[SIT + 44, 0], [SIT + 54, 1, 'inOut']]);
-  const spinK = Math.cos(spinT * Math.PI * 2);
+  if (laughing) {
+    // laugh: shoulders bounce, head tips back on each "ha"
+    billP.bodyY += Math.abs(Math.sin(f * 0.9)) * 10;
+    billP.lean += Math.sin(f * 0.9) * 2;
+    billP.smile = 1;
+  }
+  if (f >= L2.speechStart && f < GROW) billP.bend = Math.sin(f / 6) * 0.15;
+  const spinT = kf(f, [[SIT + 37, 0], [SIT + 47, 1, 'inOut']]);
   const chair: ChairState = {
     ...BASE_CHAIR,
     x: CHAIR_X,
     spin: spinT,
-    squash: kf(f, [[SIT + 34, 0], [SIT + 36, 1, 'in'], [SIT + 46, 0, 'elastic']]),
+    squash: kf(f, [[SIT + 27, 0], [SIT + 29, 1, 'in'], [SIT + 39, 0, 'elastic'], [GROW, 0], [GROW + 4, 0.7, 'in'], [GROW + 14, 0.25, 'elastic']]),
     roll: spinT * 3,
-    recline: 0,
-    tilt: 0,
   };
-  const billSeated = f >= SIT + 34;
-  const billVis = billVisible(f, BU, QS, SIT);
+  const billMode = f < BU ? null : f < ST ? 'door' : f >= SIT + 29 ? 'seated' : 'standing';
+  const armsBehind = (f >= SIT + 42 && f < L2.speechStart + 3) || false;
 
   // -------------------------------------------------------------- Pappu (lathe)
   const pKeys: Key<HumanPose>[] = [
     { f: 0, facing: -1, turn: 0.5, lookX: 0.4, lookY: 0.4, aLs: 30, aLe: -60, aRs: 34, aRe: -70, smile: 0.3 },
     { f: PD, lookY: 0.4, turn: 0.5 },
-    { f: PD + 3, lookY: -1, lookX: 0, turn: 0, browL: 0.7, browR: 0.7, smile: -0.1, e: 'out' }, // lights?
-    { f: PD + 9, turn: 0.9, lookX: 1, lookY: 0, browAng: -0.4, e: 'back' }, // the door
+    { f: PD + 3, lookY: -1, lookX: 0, turn: 0, browL: 0.7, browR: 0.7, smile: -0.1, e: 'out' },
+    { f: PD + 9, turn: 0.9, lookX: 1, lookY: 0, browAng: -0.4, e: 'back' },
     { f: ST - 1, sy: 1, crouch: 0, aRs: 34, aRe: -70, hR: 'relax', jaw: 0 },
-    { f: ST + 2, sy: 0.9, crouch: 10, e: 'out' }, // flinch
+    { f: ST + 2, sy: 0.9, crouch: 10, e: 'out' },
     { f: ST + 6, sy: 1.08, crouch: -4, aRs: 112, aRe: -128, hR: 'flat', aLs: 5, aLe: 0, hL: 'flat', lean: -3, jaw: 0.35, sweat: 0.7, browL: 1, browR: 1, e: 'back' }, // SALUTE
     { f: ST + 12, sy: 1.02, crouch: 0, e: 'out' },
+    // the owner complains → Pappu and Raju swap terrified looks
+    { f: w3(4), turn: 0.9, lookX: 1, jaw: 0.35, aRs: 112, aRe: -128, sweat: 0.7 },
+    { f: w3(5) + 2, turn: -0.9, lookX: -1, jaw: 0.6, aRs: 6, aRe: -4, hR: 'relax', sweat: 1, browAng: -0.8, e: 'back' },
+    { f: w3(7) + 4, nod: 0, lid: 0 },
+    { f: w3(7) + 8, nod: 8, lid: 0.4, e: 'in' }, // gulp
+    { f: w3(7) + 12, nod: 0, lid: 0, e: 'out' },
   ];
   const pappu = animatePose(f, { ...BASE_HUMAN, x: POS.pappu, y: FLOOR }, pKeys);
   if (f < PD) pappu.aRe = -70 + Math.sin(f / 4) * 14; // cranking the carriage wheel
@@ -173,40 +245,38 @@ export const Scene1Boss: React.FC<{ scratchOverlay?: boolean }> = ({ scratchOver
   // -------------------------------------------------------------- Raju
   const crateDrop = ST + 3;
   const rKeys: Key<HumanPose>[] = [
-    { f: 0, x: POS.raju - 230, aLs: 22, aLe: -84, aRs: 22, aRe: -84, hL: 'hold', hR: 'hold', smile: 0.3, turn: 0.3, lean: 3 },
-    { f: PD, x: POS.raju, e: 'linear' },
+    { f: 0, x: POS.raju - 300, aLs: 22, aLe: -84, aRs: 22, aRe: -84, hL: 'hold', hR: 'hold', smile: 0.3, turn: 0.3, lean: 3 },
+    { f: PD, x: POS.raju - 70, e: 'linear' },
     { f: PD + 3, lookY: -1, turn: 0, browL: 0.6, browR: 0.6, smile: 0, e: 'out' },
     { f: PD + 11, turn: -1, lookX: -1, lookY: 0, browAng: -0.5, e: 'back' },
     { f: crateDrop - 1, aLs: 22, aLe: -84, aRs: 22, aRe: -84, sy: 1, crouch: 0 },
     { f: crateDrop + 1, sy: 0.9, crouch: 10, e: 'out' },
     { f: crateDrop + 5, aLs: 3, aLe: 0, aRs: 3, aRe: 0, hL: 'flat', hR: 'flat', sy: 1.1, crouch: -6, lean: 0, turn: -0.2, lookX: -0.4, jaw: 0.2, browL: 1, browR: 1, browAng: -0.6, e: 'back' },
     { f: crateDrop + 12, sy: 1.03, crouch: 0, e: 'out' },
-    // whisper to the boss
-    { f: Q - 9, lean: 0, tilt: 0, aRs: 3, aRe: 0, turn: -0.2, jaw: 0.2 },
-    { f: Q - 2, lean: 5, tilt: 6, aRs: 22, aRe: -172, hR: 'flat', turn: 0.6, lookX: 1, jaw: 0, crouch: 6, sy: 1, e: 'back' },
-    { f: Q + Math.round((QE - Q) * 0.35), lookX: -1, turn: 0.3 }, // eyes dart to the Bill
-    { f: Q + Math.round((QE - Q) * 0.6), lookX: 1, turn: 0.6 },
-    { f: QE + 3, aRs: 22, aRe: -172, lean: 5, tilt: 6 },
-    { f: QE + 9, aRs: 6, aRe: -4, hR: 'relax', lean: 3, tilt: 3, crouch: 2, e: 'out' },
-    // reacts to the answer
-    { f: A + Math.round((AE - A) * 0.55), jaw: 0, browL: 0.6, browR: 0.6, lean: 3 },
-    { f: A + Math.round((AE - A) * 0.7), jaw: 0.55, browL: 1.2, browR: 1.2, lean: -6, sy: 1.04, sweat: 0.6, e: 'back' },
-    { f: AE + 6, turn: -0.7, lookX: -1, jaw: 0.3, e: 'inOut' },
-    // the Bill arrives: scoot away
-    { f: SIT, x: POS.raju, lean: -6, turn: -0.7, tilt: 3, crouch: 2, aLs: 3, aLe: 0, aRs: 6, aRe: -4, hL: 'flat', hR: 'relax' },
-    { f: SIT + 14, x: POS.raju + 70, lean: 10, tilt: 6, aLs: 55, aLe: -95, aRs: 60, aRe: -100, hL: 'open', hR: 'open', crouch: 8, e: 'back' },
-    { f: SIT + 34, sy: 1.0 },
-    { f: SIT + 36, sy: 0.9, e: 'out' },
-    { f: SIT + 42, sy: 1.0, e: 'elastic' },
+    // the Bill comes for the chair: Raju scoots behind the boss
+    { f: SIT, x: POS.raju - 70, lean: -6, turn: -0.7, lookX: -1, tilt: 3, crouch: 2, aLs: 3, aLe: 0, aRs: 6, aRe: -4, hL: 'flat', hR: 'relax' },
+    { f: SIT + 12, x: POS.raju, lean: 10, tilt: 6, aLs: 55, aLe: -95, aRs: 60, aRe: -100, hL: 'open', hR: 'open', crouch: 8, e: 'back' },
+    { f: SIT + 27, sy: 1.0 },
+    { f: SIT + 29, sy: 0.9, e: 'out' },
+    { f: SIT + 35, sy: 1.0, e: 'elastic' },
+    { f: GROW, sweat: 0.4, jaw: 0, crouch: 8 },
+    { f: GROW + 6, sweat: 1, jaw: 0.5, crouch: 14, sy: 0.95, e: 'back' },
+    // swaps terrified looks with Pappu
+    { f: w3(4), turn: -0.7, lookX: -1 },
+    { f: w3(5) + 4, turn: -1, lookX: -1, jaw: 0.6, browAng: -0.8, e: 'back' },
+    { f: w3(7) + 6, nod: 0, lid: 0 },
+    { f: w3(7) + 10, nod: 8, lid: 0.4, e: 'in' },
+    { f: w3(7) + 14, nod: 0, lid: 0, e: 'out' },
   ];
   const raju = animatePose(f, { ...BASE_HUMAN, x: POS.raju, y: FLOOR }, rKeys);
   if (f < PD) Object.assign(raju, walkPose(f / 8, 22, 6), { aLs: 22, aLe: -84, aRs: 22, aRe: -84, lean: 3 });
+  const crateX = POS.raju - 62;
   const crate = {
-    x: kf(f, [[0, POS.raju - 230], [PD, POS.raju, 'linear']]) + 8,
+    x: kf(f, [[0, POS.raju - 292], [PD, crateX, 'linear']]),
     y: f < crateDrop ? FLOOR - 215 + raju.crouch : kf(f, [[crateDrop, FLOOR - 215], [crateDrop + 7, FLOOR - 70, 'in'], [crateDrop + 11, FLOOR - 105, 'out'], [crateDrop + 15, FLOOR - 70, 'in']]),
     r: f < crateDrop ? 0 : kf(f, [[crateDrop, 0], [crateDrop + 7, 14, 'in'], [crateDrop + 15, 4, 'out']]),
   };
-  if (f >= SIT) raju.turn = -0.7 + (f >= SIT + 44 ? -Math.sin(spinT * Math.PI * 2) * 0.6 : 0); // eyes follow the spin
+  if (f >= SIT + 37 && f < SIT + 50) raju.turn = -0.7 - Math.sin(spinT * Math.PI * 2) * 0.6; // eyes follow the spin
 
   // -------------------------------------------------------------- Owner
   const oKeys: Key<HumanPose>[] = [
@@ -218,123 +288,81 @@ export const Scene1Boss: React.FC<{ scratchOverlay?: boolean }> = ({ scratchOver
     { f: ST + 3, sy: 0.92, crouch: 6, e: 'out' },
     { f: ST + 8, sy: 1.06, crouch: -3, aLs: 5, aLe: 0, aRs: 5, aRe: 0, hL: 'flat', hR: 'flat', jaw: 0.4, browL: 1, browR: 1, browAng: -0.7, e: 'back' }, // attention!
     { f: ST + 14, sy: 1.02, crouch: 0, e: 'out' },
-    { f: ST + 30, sweat: 0.6, jaw: 0.1 },
-    // during Raju's question: frozen, eyes on the intruder
-    { f: Q, turn: -0.8, lookX: -1, sweat: 0.8, browAng: -0.8, jaw: 0, smile: -0.3 },
-    { f: QE + 2, nod: 0, lid: 0 },
-    { f: QE + 5, nod: 7, lid: 0.3, e: 'in' }, // gulp
-    { f: QE + 9, nod: 0, lid: 0, e: 'out' },
-    // "हमारी फैक्टरी का... असली मालिक!"
-    { f: A - 4, sy: 1.0, aLs: 5, aLe: 0, crouch: 0, turn: -0.8 },
-    { f: A - 1, sy: 1.03, aLs: 10, e: 'out' }, // breath in
-    { f: A + 5, sy: 1, crouch: 7, lean: -2, turn: -0.35, lookX: -0.7, browAng: -1, browL: 0.8, browR: 0.8, smile: -0.5, e: 'inOut' },
-    { f: A + Math.round((AE - A) * 0.42), aLs: 10, aLe: 0, hL: 'flat', tilt: 0 },
-    { f: A + Math.round((AE - A) * 0.58), aLs: 72, aLe: 14, aLw: -24, hL: 'open', tilt: -6, lookX: -1, turn: -0.6, e: 'back' }, // presents "the real owner"
-    { f: AE, aLs: 66, aLe: 10, aRs: 14, tilt: -8, sy: 1 },
-    { f: AE + 5, aLs: 8, aLe: -4, hL: 'relax', aRs: 8, nod: 7, lid: 0.45, sy: 0.97, crouch: 10, e: 'inOut' }, // sigh
-    // the Bill comes for the chair
-    { f: SIT, nod: 0, lid: 0, crouch: 6, turn: -0.8, lookX: -1, sweat: 1, sy: 1 },
-    { f: SIT + 34, sy: 1 },
-    { f: SIT + 36, sy: 0.92, lid: 0.8, e: 'out' },
-    { f: SIT + 42, sy: 1, lid: 0, e: 'elastic' },
-    { f: SIT + 56, jaw: 0.25, browAng: -0.9 },
+    { f: SIT, turn: -0.8, lookX: -1, sweat: 0.6, jaw: 0.2 },
+    { f: SIT + 27, sy: 1 },
+    { f: SIT + 29, sy: 0.92, lid: 0.8, e: 'out' },
+    { f: SIT + 35, sy: 1, lid: 0, e: 'elastic' },
+    // "अरे!" — jolts upright
+    { f: w1(0) - 3, sy: 1, crouch: 0, aLs: 5, aLe: 0, aRs: 5, aRe: 0, jaw: 0.2, browAng: -0.6 },
+    { f: w1(0) + 2, sy: 1.08, crouch: -8, aLs: 118, aLe: -74, aRs: 118, aRe: -74, hL: 'open', hR: 'open', browL: 1.2, browR: 1.2, browAng: -0.3, turn: -0.6, lookX: -1, e: 'back' },
+    // "मेरी कुर्सी पर..." — points at the intruder, indignant
+    { f: w1(1) - 2, aLs: 118, aLe: -74, aRs: 118, aRe: -74, sy: 1.03 },
+    { f: w1(1) + 4, aLs: 142, aLe: 2, aLw: -8, hL: 'point', aRs: 38, aRe: -112, hR: 'fist', sy: 1, crouch: 0, lean: -4, browAng: 0.55, browL: 0.4, browR: 0.4, e: 'back' },
+    { f: w1(5), lean: -4, tilt: 0 },
+    { f: w1(5) + 4, lean: -7, tilt: -5, e: 'out' }, // "कौन" — leans in
+    { f: L1.speechEnd + 2, lean: -7, aLs: 142 },
+    // Bill laughs: owner recoils
+    { f: L2.speechStart + 2, lean: 2, tilt: 0, aLs: 40, aLe: -60, hL: 'open', browAng: -0.6, jaw: 0.2, e: 'out' },
+    { f: w2(5) + 2, turn: -0.9, lookX: -1 },
+    { f: w2(7) + 2, turn: -0.5, lookX: -0.6, browAng: -0.8, sweat: 0.8 },
+    { f: GROW, crouch: 0, sweat: 0.8, jaw: 0.1 },
+    { f: GROW + 6, crouch: 10, sy: 0.95, sweat: 1, jaw: 0.5, browL: 1, browR: 1, aLs: 30, aLe: -110, aRs: 30, aRe: -110, hL: 'fist', hR: 'fist', e: 'back' },
+    // "ये बिजली का बिल है..." — palms up, appealing to everyone
+    { f: L3.speechStart - 3, crouch: 10, sy: 0.95, jaw: 0.5, aLs: 30, aRs: 30 },
+    { f: L3.speechStart + 4, crouch: 0, sy: 1, jaw: 0, aLs: 46, aLe: 34, aRs: 46, aRe: 34, aLw: -20, aRw: -20, hL: 'open', hR: 'open', turn: -0.15, lookX: -0.2, browAng: -0.9, browL: 0.9, browR: 0.9, smile: -0.4, lean: 2, e: 'back' },
+    { f: w3(4), tilt: 0, aLs: 46, aLe: 34 },
+    { f: w3(4) + 5, tilt: -6, e: 'out' },
+    // "या वसूली गैंग?" — jabs a finger at the Bill
+    { f: w3(5) - 2, aLs: 46, aLe: 34, aRs: 46, aRe: 34, turn: -0.15 },
+    { f: w3(5) + 4, aLs: 138, aLe: 2, aLw: -8, hL: 'point', aRs: 38, aRe: -112, hR: 'fist', turn: -0.7, lookX: -1, browAng: 0.7, browL: 0.2, browR: 0.2, lean: -5, tilt: 0, smile: -0.6, e: 'back' },
+    { f: w3(7), lean: -5 },
+    { f: w3(7) + 4, lean: -8, e: 'out' },
   ];
   const owner = animatePose(f, { ...BASE_HUMAN, x: POS.owner, y: FLOOR }, oKeys);
   if (f < PD) owner.nod = Math.max(0, Math.sin(((f - 9) / 36) * Math.PI * 2)) * 4; // nods along with the press
-  if (f >= SIT + 44) owner.turn = -0.8 - Math.sin(spinT * Math.PI * 2) * 0.5;
+  if (f >= SIT + 37 && f < SIT + 50) owner.turn = -0.8 - Math.sin(spinT * Math.PI * 2) * 0.5;
+  if (f >= w1(5) && f < L1.speechEnd) owner.aLs += Math.sin(f * 1.4) * 3; // the accusing finger shakes
 
   // -------------------------------------------------------------- mouths
-  const vOwner = mouthFor('owner', f, B);
-  const vRaju = mouthFor('raju', f, B);
-  const vBill = mouthFor('bill', f, B);
-  owner.nod += talk(vOwner);
-  raju.nod += talk(vRaju);
+  const mouths = { owner: mouthFor('owner', f, B), raju: mouthFor('raju', f, B), pappu: mouthFor('pappu', f, B), bill: mouthFor('bill', f, B) };
+  applyTalk(owner, mouths.owner);
 
   return (
     <AbsoluteFill style={{ background: '#1a1410' }}>
-      <World cam={cam}>
-        <defs>
-          <filter id="silhouette" colorInterpolationFilters="sRGB">
-            <feColorMatrix type="matrix" values="0 0 0 0 0.05  0 0 0 0 0.03  0 0 0 0 0.06  0 0 0 1 0" />
-          </filter>
-          <radialGradient id="vignette" cx="0.5" cy="0.5" r="0.75">
-            <stop offset="0.55" stopColor="#000" stopOpacity="0" />
-            <stop offset="1" stopColor="#000" stopOpacity="0.55" />
-          </radialGradient>
-        </defs>
-        <Layer p={0.8}>
-          <BackWall frame={f} meterSpeed={f < PD ? 1 : f < ST ? 0.2 : 4} />
-          {f >= QS - 6 && f < SIT && (
-            // the Bill's giant shadow climbing the wall behind them
-            <g opacity={kf(f, [[QS - 6, 0], [QS + 4, 0.42]])} filter="url(#silhouette)">
-              <Bill
-                p={{ ...BASE_BILL, x: kf(f, [[QS - 6, 1900], [Q + 6, 2120, 'out']]), y: FLOOR + 120, scale: 1.75, turn: 0.5, aLa: 12, aLl: 125, aLb: -0.95, aRa: 12, aRl: 125, aRb: -0.95 }}
-                viseme="X"
-                open={1}
-                frame={f}
-              />
-            </g>
-          )}
-        </Layer>
-        <Layer p={0.88}>
-          <Roof frame={f} lightsOn={lit} />
-        </Layer>
-        <Layer p={1}>
-          <Floor />
-          <DoorOutside />
-          {billVis === 'door' && (
-            <g>
-              <Bill p={billP} viseme={vBill} open={blink(f, 9)} frame={f} />
-              <g opacity={billSil} filter="url(#silhouette)">
-                <Bill p={{ ...billP, glint: 0 }} viseme={vBill} open={1} frame={f} />
-              </g>
-              {billP.glint > 0.01 && (
-                <g transform={`translate(${billP.x + (-80 + billP.turn * 22) * BILL_SCALE} ${FLOOR - 554 * BILL_SCALE}) scale(${billP.glint * 2.8}) rotate(${f * 6})`}>
-                  <path d="M 0 -26 L 5 -5 L 26 0 L 5 5 L 0 26 L -5 5 L -26 0 L -5 -5 Z" fill="#fff" stroke="#FFF3B0" strokeWidth={2} />
-                </g>
-              )}
-            </g>
-          )}
-          <RollerDoor open={kf(f, [[BU, 0], [BU + 7, 1, 'in']])} frame={f} rattle={f >= RT && f < BU ? 1 : 0} />
-          <DoorLight amount={f >= BU && f < QS ? kf(f, [[BU, 0], [BU + 6, 1]]) : 0} />
-          <Lathe frame={f} running={running} x={850} />
-          <Press frame={f} running={running} x={1230} />
-          <Desk x={2300} frame={f} />
-          <Crates x={2660} />
-          <Drill x={2950} frame={f} running={running} />
-          <ChairBack c={chair} />
-          {!billSeated && <ChairFront c={chair} />}
-          <Pappu p={pappu} viseme={mouthFor('pappu', f, B)} open={blink(f, 21)} frame={f} />
-          <Raju p={raju} viseme={vRaju} open={Math.min(blink(f, 7, [PD + 10, QE + 4]), 1 - raju.lid)} frame={f} />
-          <g transform={`translate(${crate.x} ${crate.y}) rotate(${crate.r})`}>
-            <rect x={-70} y={-55} width={140} height={110} fill="#C9954F" stroke="#2A1A14" strokeWidth={5} />
-            <path d="M -70 -55 L 70 55 M 70 -55 L -70 55" stroke="#A0733A" strokeWidth={7} />
-          </g>
-          <Owner p={owner} viseme={vOwner} open={blink(f, 3, [PD + 12, QE + 5])} frame={f} />
-          {billVis === 'walk' && <Bill p={billP} viseme={vBill} open={blink(f, 9)} frame={f} spinK={spinK} armsBehind={f >= SIT + 49} part={billSeated ? 'body' : 'all'} />}
-          {billSeated && <ChairFront c={chair} />}
-          {billSeated && <Bill p={billP} viseme={vBill} open={1} frame={f} spinK={spinK} part="legs" shadow={false} />}
-        </Layer>
-        {/* lighting */}
-        <rect x={0} y={0} width={1920} height={1080} fill="#0B0710" opacity={(1 - lit) * 0.62} />
-        {f >= BU && <rect x={0} y={0} width={1920} height={1080} fill="#5A1030" opacity={0.08} style={{ mixBlendMode: 'multiply' }} />}
-        <rect x={0} y={0} width={1920} height={1080} fill="url(#vignette)" />
-      </World>
-      <Soundtrack beats={B} sfx={scene1Sfx(B, booms)} music={scene1Music(B)} />
+      <Stage
+        s={{
+          frame: f,
+          cam,
+          lit: lightsOn(f, PD, BU),
+          running: f < PD + 4 ? 1 : 0,
+          meterSpeed: f < PD ? 1 : f < ST ? 0.2 : f < GROW ? 4 : 9,
+          doorOpen: kf(f, [[BU, 0], [BU + 7, 1, 'in']]),
+          doorRattle: f >= RT && f < BU ? 1 : 0,
+          doorLight: f >= BU && f < SIT ? kf(f, [[BU, 0], [BU + 6, 1]]) : 0,
+          villainTint: f >= BU ? 1 : 0,
+          sunlight: 0,
+          chair,
+          people: { pappu, raju, owner },
+          bill: billMode ? { p: billP, mode: billMode, silhouette: f < ST ? 1 : kf(f, [[ST, 1], [ST + 14, 0, 'out']]), spinK: Math.cos(spinT * Math.PI * 2), armsBehind } : undefined,
+          mouths,
+          eyes: {
+            owner: blink(f, 3, [PD + 12, L2.speechStart]),
+            raju: blink(f, 7, [PD + 10]),
+            pappu: blink(f, 21),
+            bill: blink(f, 9),
+          },
+          crate,
+          screen: <TariffStamp t={f - GROW - 2} />,
+        }}
+      />
+      <Soundtrack beats={B} sfx={scene1Sfx(B, booms)} music={withMusic ? scene1Music(B) : []} />
       {scratchOverlay && <ScratchOverlay beats={B} />}
     </AbsoluteFill>
   );
 };
 
-function billVisible(f: number, BU: number, QS: number, SIT: number): 'none' | 'door' | 'walk' {
-  if (f < BU) return 'none';
-  if (f < QS) return f < BU + 33 ? 'door' : 'walk';
-  if (f < SIT) return 'none';
-  return 'walk';
-}
-
-export function scene1Sfx(B: Resolved, booms: number[]): Sfx[] {
-  const { PD, RT, BU, ST, QE, SIT } = scene1Timing(B);
+export function scene1Sfx(B: Resolved, booms = [B.steps.start, B.steps.start + STEP, B.sit.start + 6]): Sfx[] {
+  const { PD, RT, BU, ST, SIT, GROW } = scene1Timing(B);
   return [
     { src: 'flicker.wav', at: PD, vol: 0.7 },
     { src: 'power_down.wav', at: PD + 2, vol: 0.8 },
@@ -342,16 +370,21 @@ export function scene1Sfx(B: Resolved, booms: number[]): Sfx[] {
     { src: 'shutter_rattle.wav', at: RT, vol: 0.8 },
     { src: 'shutter_slam.wav', at: BU, vol: 0.6 },
     { src: 'glint.wav', at: BU + 15, vol: 0.45 },
-    ...booms.map((b, i) => ({ src: 'boom_step.wav', at: b, vol: i === 0 ? 0.62 : i < 3 ? 0.5 : 0.4 })),
+    ...booms.map((b, i) => ({ src: 'boom_step.wav', at: b, vol: i === 0 ? 0.62 : 0.5 })),
     { src: 'snap_attention.wav', at: ST + 5, vol: 0.8 },
     { src: 'crate_drop.wav', at: ST + 10, vol: 0.8 },
-    { src: 'gulp.wav', at: QE + 4, vol: 0.9 },
-    { src: 'whoosh.wav', at: SIT + 27, vol: 0.5 },
-    { src: 'cushion_plop.wav', at: SIT + 35, vol: 0.7 },
-    { src: 'chair_squeak.wav', at: SIT + 36, vol: 0.6 },
-    { src: 'chair_squeak.wav', at: SIT + 46, vol: 0.5, rate: 1.15 },
-    { src: 'whoosh.wav', at: SIT + 45, vol: 0.5 },
-    { src: 'glint.wav', at: SIT + 56, vol: 0.55 },
+    { src: 'whoosh.wav', at: SIT + 20, vol: 0.5 },
+    { src: 'cushion_plop.wav', at: SIT + 28, vol: 0.7 },
+    { src: 'chair_squeak.wav', at: SIT + 29, vol: 0.6 },
+    { src: 'chair_squeak.wav', at: SIT + 38, vol: 0.5, rate: 1.15 },
+    { src: 'whoosh.wav', at: SIT + 37, vol: 0.45 },
+    { src: 'glint.wav', at: SIT + 49, vol: 0.5 },
+    { src: 'glint.wav', at: wordAt(B.l2, 4) + 2, vol: 0.35 },
+    { src: 'grow.wav', at: GROW - 1, vol: 0.55, dur: 40 },
+    { src: 'stamp.wav', at: GROW + 2, vol: 0.6 },
+    { src: 'chair_squeak.wav', at: GROW + 4, vol: 0.5, rate: 0.8 },
+    { src: 'gulp.wav', at: wordAt(B.l3, 7) + 8, vol: 0.7 },
+    { src: 'gulp.wav', at: wordAt(B.l3, 7) + 10, vol: 0.6, rate: 1.2 },
   ];
 }
 
@@ -360,6 +393,6 @@ export function scene1Music(B: Resolved): MusicCue[] {
   return [
     { src: 'sfx/factory_ambience.wav', from: 0, to: PD + 8, vol: 0.55, fadeOut: 8, duck: 1 },
     { src: 'music/villain_sting.wav', from: BU, to: BU + 120, vol: 0.55, duck: 0.5, fadeOut: 20 },
-    { src: 'music/villain_bed.wav', from: ST + 24, to: END, vol: 0.38, duck: 0.3, fadeIn: 14, loop: true },
+    { src: 'music/villain_bed.wav', from: ST + 24, to: END, vol: 0.38, duck: 0.28, fadeIn: 14, loop: true },
   ];
 }
