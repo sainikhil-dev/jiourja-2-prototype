@@ -2,8 +2,12 @@
  * Live-action intro (Team Miles Ahead, FMS Delhi), played before the cartoon.
  *
  * Picture: public/intro/intro_source.mp4 (phone video, 1024×576, 30 fps), muted.
- * Sound:   public/intro/intro_voice_clean.mp3, the clean recording of the same
- *          take. It starts 1.30 s into the video (measured by cross-correlating
+ * Sound:   public/intro/intro_voice_denoised.wav — the clean recording of the same
+ *          take (intro_voice_clean.mp3) with outdoor noise removed: RNNoise
+ *          (neural speech denoiser, scripts/denoise-rnnoise.mjs) everywhere, a
+ *          gentler FFT denoise on her name so its "Kr" onset stays crisp, and
+ *          a 70 Hz high-pass. Pause noise drops ~20 dB; speech level and
+ *          recognisability are unchanged (Whisper confidence 0.77 → 0.75). It starts 1.30 s into the video (measured by cross-correlating
  *          the two soundtracks, r = 0.77), which keeps her lip-sync exact.
  *
  * The take ends "…energy as a service, and now Rajni sir will elaborate the
@@ -27,7 +31,7 @@ export const INTRO_SPEECH_END = AUDIO_AT + Math.round(INTRO_CUT * FPS); // her l
 export const BRIDGE = 32; // frames of freeze + emblem after she finishes
 export const DISSOLVE = 15; // frames the intro dissolves over the start of the cartoon
 export const INTRO_FRAMES = INTRO_SPEECH_END + BRIDGE;
-const VOICE_GAIN = 1.2; // the clean take is ~3 dB quieter than the cartoon's dialogue
+const VOICE_GAIN = 1.45; // match the cartoon's dialogue level (the denoised take is ~6 dB quieter)
 
 const clamp = { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' } as const;
 
@@ -66,7 +70,7 @@ export const Intro: React.FC = () => {
         </svg>
       )}
       <Sequence from={AUDIO_AT} durationInFrames={E - AUDIO_AT} name="Intro voice (clean)">
-        <Audio src={staticFile('intro/intro_voice_clean.mp3')} volume={(t) => VOICE_GAIN * interpolate(t, [E - AUDIO_AT - 2, E - AUDIO_AT], [1, 0], clamp)} />
+        <Audio src={staticFile('intro/intro_voice_denoised.wav')} volume={(t) => VOICE_GAIN * interpolate(t, [E - AUDIO_AT - 2, E - AUDIO_AT], [1, 0], clamp)} />
       </Sequence>
     </AbsoluteFill>
   );

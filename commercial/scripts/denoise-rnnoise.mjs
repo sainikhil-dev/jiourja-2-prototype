@@ -1,0 +1,14 @@
+import * as Echogarden from 'echogarden';
+import fs from 'node:fs';
+const r = await Echogarden.denoise(process.argv[2], { engine: 'rnnoise' });
+const { sampleRate, audioChannels } = r.denoisedAudio;
+const n = audioChannels[0].length;
+const ch = audioChannels.length;
+const data = Buffer.alloc(n * ch * 2);
+for (let i = 0; i < n; i++) for (let c = 0; c < ch; c++) data.writeInt16LE(Math.max(-1, Math.min(1, audioChannels[c][i])) * 32767, (i * ch + c) * 2);
+const h = Buffer.alloc(44);
+h.write('RIFF', 0); h.writeUInt32LE(36 + data.length, 4); h.write('WAVEfmt ', 8); h.writeUInt32LE(16, 16); h.writeUInt16LE(1, 20);
+h.writeUInt16LE(ch, 22); h.writeUInt32LE(sampleRate, 24); h.writeUInt32LE(sampleRate * ch * 2, 28); h.writeUInt16LE(ch * 2, 32); h.writeUInt16LE(16, 34);
+h.write('data', 36); h.writeUInt32LE(data.length, 40);
+fs.writeFileSync(process.argv[3], Buffer.concat([h, data]));
+console.log('wrote', process.argv[3], sampleRate, ch, (n / sampleRate).toFixed(2) + 's');
