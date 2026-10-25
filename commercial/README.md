@@ -3,6 +3,7 @@
 A 2D cartoon commercial built with **Remotion + React + TypeScript**. Every character is an original SVG cut-out rig, and lip-sync is driven by the recorded ElevenLabs voices.
 
 **Finished cut:** `deliverables/final/JioUrja2_Factory_Ka_Asli_Maalik_1080p.mp4` (69.5 s, 1920×1080, 30 fps, H.264, AAC 256 kb/s, peak -2.2 dBFS).
+**English-subtitled cut:** `deliverables/final/JioUrja2_Factory_Ka_Asli_Maalik_1080p_EN-subs.mp4` (subtitles burned in), plus `deliverables/final/JioUrja2_English.srt` (31 cues).
 **QA cut:** `deliverables/final/JioUrja2_QA_lipsync_overlay_540p.mp4` is the same film with the speaker, the line and its timing source shown on screen.
 
 > **Placeholder audio:** the music and SFX are synthesised placeholders (`npm run sfx`). Drop a final mix into `public/audio/music/` or `public/audio/sfx/` with the same file name and re-render; no code changes are needed.
@@ -17,6 +18,8 @@ npm run studio         # Remotion Studio: timeline, scrubbing, every scene as it
 npm run render         # → out/JioUrja2_Factory_Ka_Asli_Maalik_1080p.mp4 (render + -1 dBFS limiter)
 npm run render:qa      # → out/commercial_QA_540p.mp4 with the caption/QA overlay
 npm run qa:sync        # renders the dialogue stem and writes SYNC_QA.md
+npm run render:en      # → out/JioUrja2_Factory_Ka_Asli_Maalik_1080p_EN-subs.mp4 (English subtitles burned in)
+npm run qa:subs        # checks subtitles against the rendered dialogue, writes SUBTITLE_QA.md + the .srt
 ```
 
 ## The story as built
@@ -44,6 +47,18 @@ Running time is 69.5 s. The recorded voices alone take 58 s, so this is the tigh
 4. **QA.** `npm run qa:sync` renders the dialogue stem and checks it against the mouths frame by frame. Current result: 0 frames of mouth movement over silence, 0 frames after a line ends, 0 overlapping speakers, and voice-to-mouth onset within 0–2 frames on every line.
 
 This is forced alignment computed from the audio plus your text. ElevenLabs' own timestamp data wasn't available: the take was exported without it, and their API is blocked from this container.
+
+## English subtitles
+
+- **Text:** `src/subtitles/en.ts`. The translations are written for the comedy and pace of the Hindi rather than word for word. Each cue names the range of spoken words it covers; `\n` is a deliberate line break (two lines at most, each line ≤ 42 characters).
+- **Timing:** `src/subtitles/Subtitles.tsx`, one source for both the burned-in captions and the SRT.
+  - **In:** the frame the cue's first word is heard (from the forced-alignment word times), snapped forward to the first voiced frame. A subtitle never appears before the voice.
+  - **Out:** the last word's end plus a short hold. It is extended to a comfortable reading time (≤ 17 characters/second, never under 0.7 s), but always clears the next cue by 2 frames. No subtitle runs onto the end card.
+- **Style:** Baloo 2 ExtraBold, white with a black outline and soft shadow, bottom centre, 54 px at 1080p. The same placement and size are used throughout, in the lower band of the frame below the characters' faces.
+- **QA (`SUBTITLE_QA.md`):** checked against the rendered dialogue stem.
+  - Every cue appears 0–3 frames after its words become audible; none appears early.
+  - None cuts off its line, none overlaps, all are ≤ 2 lines, and all read at ≤ 20 characters/second.
+  - 97 % of spoken frames have a subtitle on screen; the rest are pauses between phrases and laughs.
 
 ### Replacing or re-recording voices
 

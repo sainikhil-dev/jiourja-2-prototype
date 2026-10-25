@@ -15,6 +15,8 @@ export const RemotionRoot: React.FC = () => (
   <>
     {/* The finished spot */}
     <Composition id="Commercial" component={Commercial} durationInFrames={TOTAL_FRAMES} {...HD} defaultProps={{ scratchOverlay: false }} />
+    {/* The finished spot with burned-in English subtitles */}
+    <Composition id="CommercialEN" component={Commercial} durationInFrames={TOTAL_FRAMES} {...HD} defaultProps={{ scratchOverlay: false, subtitles: true }} />
     {/* Same cut with a QA overlay: who is speaking, the line text and how its lip-sync was timed */}
     <Composition id="DialogueStem" component={Commercial} durationInFrames={TOTAL_FRAMES} {...HD} defaultProps={{ scratchOverlay: false, stem: "dialogue" as const }} />
     <Composition id="CommercialQA" component={Commercial} durationInFrames={TOTAL_FRAMES} {...HD} defaultProps={{ scratchOverlay: true }} />

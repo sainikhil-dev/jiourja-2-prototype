@@ -5,44 +5,15 @@
  */
 import React from 'react';
 import { AbsoluteFill, Sequence } from 'remotion';
-import { Scene1Boss, S1, scene1Music } from './scenes/Scene1Boss';
-import { Scene2Problem, S2 } from './scenes/Scene2Problem';
-import { Scene3Reveal, S3, scene3Timing } from './scenes/Scene3Reveal';
-import { Scene4App, S4 } from './scenes/Scene4App';
-import { Scene5Punchline, S5, scene5Timing } from './scenes/Scene5Punchline';
+import { S1, scene1Music } from './scenes/Scene1Boss';
+import { scene3Timing } from './scenes/Scene3Reveal';
+import { scene5Timing } from './scenes/Scene5Punchline';
 import { MixContext, Soundtrack, type MusicCue } from './audio/Soundtrack';
-import { offsetBeats, type Resolved } from './timeline/beats';
 import { ScratchOverlay } from './scenes/ScratchOverlay';
+import { Subtitles } from './subtitles/Subtitles';
 
-const SCENES = [
-  { id: 'S1', C: Scene1Boss, B: S1 },
-  { id: 'S2', C: Scene2Problem, B: S2 },
-  { id: 'S3', C: Scene3Reveal, B: S3 },
-  { id: 'S4', C: Scene4App, B: S4 },
-  { id: 'S5', C: Scene5Punchline, B: S5 },
-] as const;
-
-export const SCENE_OFFSETS: number[] = [];
-{
-  let o = 0;
-  for (const s of SCENES) {
-    SCENE_OFFSETS.push(o);
-    o += s.B.__total.end;
-  }
-  SCENE_OFFSETS.push(o);
-}
-export const TOTAL_FRAMES = SCENE_OFFSETS[SCENE_OFFSETS.length - 1];
-
-/** Every line of the film on the master timeline (for ducking and QA). */
-export const MASTER: Resolved = (() => {
-  const all: Record<string, Resolved[string]> = {};
-  SCENES.forEach((s, i) => {
-    const ob = offsetBeats(s.B, SCENE_OFFSETS[i]);
-    for (const [k, v] of Object.entries(ob)) if (k !== '__total') all[`${s.id}.${k}`] = v;
-  });
-  all.__total = { id: '__total', start: 0, end: TOTAL_FRAMES };
-  return all as Resolved;
-})();
+import { SCENES, SCENE_OFFSETS, TOTAL_FRAMES, MASTER } from './timeline/master';
+export { SCENE_OFFSETS, TOTAL_FRAMES, MASTER };
 
 function score(): MusicCue[] {
   const o3 = SCENE_OFFSETS[2];
@@ -58,7 +29,7 @@ function score(): MusicCue[] {
   ];
 }
 
-export const Commercial: React.FC<{ scratchOverlay?: boolean; stem?: 'mix' | 'dialogue' }> = ({ scratchOverlay = false, stem = 'mix' }) => (
+export const Commercial: React.FC<{ scratchOverlay?: boolean; stem?: 'mix' | 'dialogue'; subtitles?: boolean }> = ({ scratchOverlay = false, stem = 'mix', subtitles = false }) => (
   <MixContext.Provider value={stem === 'dialogue' ? { dialogue: true, sfx: false, music: false } : { dialogue: true, sfx: true, music: true }}>
   <AbsoluteFill style={{ background: '#000' }}>
     {SCENES.map((s, i) => {
@@ -70,6 +41,7 @@ export const Commercial: React.FC<{ scratchOverlay?: boolean; stem?: 'mix' | 'di
       );
     })}
     <Soundtrack beats={MASTER} sfx={[]} music={score()} dialogue={false} />
+    {subtitles && <Subtitles />}
     {scratchOverlay && <ScratchOverlay beats={MASTER} />}
   </AbsoluteFill>
   </MixContext.Provider>

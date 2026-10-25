@@ -14,7 +14,9 @@
     "analyze-audio": "node scripts/analyze-audio.mjs",
     "render": "remotion render src/index.ts Commercial out/commercial_raw.mp4 && bash scripts/master.sh out/commercial_raw.mp4 out/JioUrja2_Factory_Ka_Asli_Maalik_1080p.mp4",
     "render:qa": "remotion render src/index.ts CommercialQA out/commercial_QA_540p.mp4 --scale=0.5",
-    "qa:sync": "remotion render src/index.ts DialogueStem out/dialogue.wav --codec=wav && tsx scripts/qa-sync.tsx out/dialogue.wav"
+    "qa:sync": "remotion render src/index.ts DialogueStem out/dialogue.wav --codec=wav && tsx scripts/qa-sync.tsx out/dialogue.wav",
+    "render:en": "remotion render src/index.ts CommercialEN out/commercial_en_raw.mp4 && bash scripts/master.sh out/commercial_en_raw.mp4 out/JioUrja2_Factory_Ka_Asli_Maalik_1080p_EN-subs.mp4",
+    "qa:subs": "tsx scripts/qa-subtitles.tsx out/dialogue.wav"
   },
   "dependencies": {
     "@remotion/cli": "^4.0.538",
