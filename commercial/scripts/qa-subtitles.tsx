@@ -12,6 +12,7 @@
 import fs from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { SUBTITLES, toSrt } from '../src/subtitles/Subtitles';
+import { COMMERCIAL_AT } from '../src/Film';
 import { MASTER, TOTAL_FRAMES } from '../src/timeline/master';
 import { lineBeats } from '../src/timeline/beats';
 
@@ -69,6 +70,8 @@ for (const b of lineBeats(MASTER)) {
 
 fs.mkdirSync('deliverables/final', { recursive: true });
 fs.writeFileSync('deliverables/final/JioUrja2_English.srt', toSrt());
+// the full film (intro + commercial): same cues shifted by the intro length
+fs.writeFileSync('deliverables/final/JioUrja2_Film_with_Intro_English.srt', toSrt(SUBTITLES.map((c) => ({ ...c, start: c.start + COMMERCIAL_AT, end: c.end + COMMERCIAL_AT }))));
 const md = `# English subtitle QA
 
 Checked against the **rendered dialogue stem** (\`${wav}\`), the audio the viewer hears, at 30 fps. "Voice onset" is the first audible frame of the cue's words. A subtitle must never appear before it (Δ ≥ 0).

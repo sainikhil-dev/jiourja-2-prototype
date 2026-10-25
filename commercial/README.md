@@ -18,6 +18,8 @@ npm run studio         # Remotion Studio: timeline, scrubbing, every scene as it
 npm run render         # → out/JioUrja2_Factory_Ka_Asli_Maalik_1080p.mp4 (render + -1 dBFS limiter)
 npm run render:qa      # → out/commercial_QA_540p.mp4 with the caption/QA overlay
 npm run qa:sync        # renders the dialogue stem and writes SYNC_QA.md
+npm run render:film    # → out/JioUrja2_Film_with_Intro_1080p.mp4 (intro + commercial)
+npm run render:film:en # → …_EN-subs.mp4 (intro + commercial, English subtitles)
 npm run render:en      # → out/JioUrja2_Factory_Ka_Asli_Maalik_1080p_EN-subs.mp4 (English subtitles burned in)
 npm run qa:subs        # checks subtitles against the rendered dialogue, writes SUBTITLE_QA.md + the .srt
 ```
@@ -47,6 +49,17 @@ Running time is 69.5 s. The recorded voices alone take 58 s, so this is the tigh
 4. **QA.** `npm run qa:sync` renders the dialogue stem and checks it against the mouths frame by frame. Current result: 0 frames of mouth movement over silence, 0 frames after a line ends, 0 overlapping speakers, and voice-to-mouth onset within 0–2 frames on every line.
 
 This is forced alignment computed from the audio plus your text. ElevenLabs' own timestamp data wasn't available: the take was exported without it, and their API is blocked from this container.
+
+## Live-action intro (Film / FilmEN)
+
+The delivered film is **intro → bridge → commercial** (82.3 s): `deliverables/final/JioUrja2_Film_with_Intro_1080p.mp4` and `…_EN-subs.mp4`, plus `JioUrja2_Film_with_Intro_English.srt`.
+
+- **Picture:** `public/intro/intro_source.mp4` (phone video, 1024×576), upscaled to 1080p. The first 0.5 s is trimmed.
+- **Sound:** `public/intro/intro_voice_clean.mp3`, the clean recording. It is placed 1.30 s into the video, measured by cross-correlating the two soundtracks (r = 0.77). The rendered intro matches the original video's soundtrack at 0.00 s offset, so her lip-sync is exact.
+- **The Rajni line:** the take ends "…energy as a service, and now Rajni sir will elaborate the idea further." Because nobody elaborates afterwards, her part ends on the complete sentence "…by providing them solar rooftop energy as a service." The cut is at 11.37 s into the clean audio; Whisper confirms the kept part ends on "service." and the removed part starts "And now…".
+- **Bridge (≈1 s):** her last frame freezes (so her lips never move without sound) and slowly pushes in, going warm and soft. The JioUrja 2.0 emblem pops with a sparkle, a music lift that started quietly under her last phrase swells, and the picture dissolves over 0.5 s into the factory.
+- **Subtitles:** the intro is in English, so it carries no subtitles. The film SRT is the commercial's cues shifted by 12.73 s.
+- **If Rajni presents live after the video,** set `INTRO_CUT` in `src/Intro.tsx` to `14.26` to keep the full line.
 
 ## English subtitles
 

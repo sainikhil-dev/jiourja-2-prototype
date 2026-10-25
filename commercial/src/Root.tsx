@@ -7,13 +7,19 @@ import { Scene3Reveal, S3 } from './scenes/Scene3Reveal';
 import { Scene4App, S4 } from './scenes/Scene4App';
 import { Scene5Punchline, S5 } from './scenes/Scene5Punchline';
 import { Commercial, TOTAL_FRAMES } from './Commercial';
+import { Film, FILM_FRAMES } from './Film';
+import { Intro, INTRO_FRAMES } from './Intro';
 import { FPS } from './timeline/beats';
 
 const HD = { fps: FPS, width: 1920, height: 1080 } as const;
 
 export const RemotionRoot: React.FC = () => (
   <>
-    {/* The finished spot */}
+    {/* Delivered film: live-action intro → commercial (with / without English subtitles) */}
+    <Composition id="Film" component={Film} durationInFrames={FILM_FRAMES} {...HD} defaultProps={{ subtitles: false }} />
+    <Composition id="FilmEN" component={Film} durationInFrames={FILM_FRAMES} {...HD} defaultProps={{ subtitles: true }} />
+    <Composition id="Intro" component={Intro} durationInFrames={INTRO_FRAMES} {...HD} />
+    {/* The cartoon spot on its own */}
     <Composition id="Commercial" component={Commercial} durationInFrames={TOTAL_FRAMES} {...HD} defaultProps={{ scratchOverlay: false }} />
     {/* The finished spot with burned-in English subtitles */}
     <Composition id="CommercialEN" component={Commercial} durationInFrames={TOTAL_FRAMES} {...HD} defaultProps={{ scratchOverlay: false, subtitles: true }} />
