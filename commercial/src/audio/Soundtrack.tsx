@@ -3,7 +3,7 @@
  * Music is automatically ducked under any speech, with short ramps so it
  * never "pumps" or cuts abruptly.
  */
-import React from 'react';
+import React, { createContext, useContext } from 'react';
 import { Audio, Sequence, staticFile } from 'remotion';
 import { lineBeats, type Resolved } from '../timeline/beats';
 
@@ -18,6 +18,12 @@ export type MusicCue = {
   fadeOut?: number;
   loop?: boolean;
 };
+
+/** Which stems play. The QA render uses dialogue-only to verify lip-sync against the voice. */
+export const MixContext = createContext({ dialogue: true, sfx: true, music: true });
+
+/** Gain staging (the ElevenLabs take is mastered to 0 dBFS; leave headroom for music + SFX). */
+const GAIN = { dialogue: 0.7, sfx: 0.72, music: 0.95 };
 
 const ramp = (x: number) => Math.max(0, Math.min(1, x));
 
@@ -36,26 +42,29 @@ export function duckEnvelope(frame: number, beats: Resolved, duck: number, rampF
   return g;
 }
 
-export const Soundtrack: React.FC<{ beats: Resolved; sfx: Sfx[]; music: MusicCue[]; dialogueVol?: number }> = ({
+export const Soundtrack: React.FC<{ beats: Resolved; sfx: Sfx[]; music: MusicCue[]; dialogueVol?: number; dialogue?: boolean }> = ({
   beats,
   sfx,
   music,
   dialogueVol = 1,
-}) => (
+  dialogue = true,
+}) => {
+  const mix = useContext(MixContext);
+  return (
   <>
     {lineBeats(beats)
-      .filter((b) => b.line.file)
+      .filter((b) => dialogue && mix.dialogue && b.line.file)
       .map((b) => (
         <Sequence key={b.id} from={b.line.playFrom} durationInFrames={b.line.playTo - b.line.playFrom} name={`VO ${b.line.id}`}>
-          <Audio src={staticFile(b.line.file!)} startFrom={b.line.playFrom - b.line.fileZero} volume={dialogueVol} />
+          <Audio src={staticFile(b.line.file!)} startFrom={b.line.playFrom - b.line.fileZero} volume={dialogueVol * GAIN.dialogue} />
         </Sequence>
       ))}
-    {sfx.map((s, i) => (
+    {mix.sfx && sfx.map((s, i) => (
       <Sequence key={`sfx${i}`} from={Math.round(s.at)} durationInFrames={s.dur ?? 50} name={`SFX ${s.src}`}>
-        <Audio src={staticFile(`audio/sfx/${s.src}`)} volume={s.vol ?? 1} playbackRate={s.rate ?? 1} />
+        <Audio src={staticFile(`audio/sfx/${s.src}`)} volume={(s.vol ?? 1) * GAIN.sfx} playbackRate={s.rate ?? 1} />
       </Sequence>
     ))}
-    {music.map((m, i) => (
+    {mix.music && music.map((m, i) => (
       <Sequence key={`mus${i}`} from={m.from} durationInFrames={m.to - m.from} name={`MUSIC ${m.src}`}>
         <Audio
           src={staticFile(`audio/${m.src}`)}
@@ -64,10 +73,11 @@ export const Soundtrack: React.FC<{ beats: Resolved; sfx: Sfx[]; music: MusicCue
             const abs = f + m.from;
             const fin = m.fadeIn ? ramp(f / m.fadeIn) : 1;
             const fout = m.fadeOut ? ramp((m.to - abs) / m.fadeOut) : 1;
-            return m.vol * fin * fout * duckEnvelope(abs, beats, m.duck ?? 0.32);
+            return GAIN.music * m.vol * fin * fout * duckEnvelope(abs, beats, m.duck ?? 0.32);
           }}
         />
       </Sequence>
     ))}
   </>
-);
+  );
+};

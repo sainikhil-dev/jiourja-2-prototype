@@ -2,11 +2,13 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Player, type PlayerRef } from '@remotion/player';
 import { Scene1Boss, S1 } from '../src/scenes/Scene1Boss';
+import { Commercial, TOTAL_FRAMES } from '../src/Commercial';
 import { CharacterSheet } from '../src/scenes/CharacterSheet';
 import { FPS } from '../src/timeline/beats';
 
 const COMPS = {
-  Scene1: { component: Scene1Boss, frames: S1.__total.end, label: 'Scene 1 (voiced)' },
+  Commercial: { component: Commercial, frames: TOTAL_FRAMES, label: 'Full commercial' },
+  Scene1: { component: Scene1Boss, frames: S1.__total.end, label: 'Scene 1' },
   CharacterSheet: { component: CharacterSheet, frames: 240, label: 'Character model sheet' },
 } as const;
 type CompId = keyof typeof COMPS;
@@ -20,7 +22,7 @@ const tc = (f: number) => `${(f / FPS).toFixed(2)} s · f${f}`;
 
 const App: React.FC = () => {
   const ref = useRef<PlayerRef>(null);
-  const [comp, setComp] = useState<CompId>('Scene1');
+  const [comp, setComp] = useState<CompId>('Commercial');
   const [frame, setFrame] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [overlay, setOverlay] = useState(true);
@@ -90,11 +92,11 @@ const App: React.FC = () => {
         />
         <span style={{ fontVariantNumeric: 'tabular-nums', minWidth: 120 }}>{tc(frame)}</span>
         <label style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-          <input type="checkbox" checked={overlay} onChange={(e) => setOverlay(e.target.checked)} /> scratch captions
+          <input type="checkbox" checked={overlay} onChange={(e) => setOverlay(e.target.checked)} /> captions
         </label>
       </div>
       <p style={{ opacity: 0.7, fontSize: 13 }}>
-        Voices are not in this preview yet. Mouth timing is a scratch guess from the Hindi text, and the music and SFX are synthesised placeholders. The final lip-sync will be built from your ElevenLabs takes.
+        Voices: your ElevenLabs take, lip-synced by forced alignment (see AUDIO_REPORT.md and SYNC_QA.md). The music and SFX are synthesised placeholders; replace files in public/audio/ to swap them. Tick “captions” to see the speaker, the line and how its timing was measured.
       </p>
     </div>
   );

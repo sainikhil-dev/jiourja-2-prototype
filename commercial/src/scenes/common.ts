@@ -29,3 +29,29 @@ export function lightsOn(f: number, PD: number, BU: number) {
   const pattern = [0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0];
   return pattern[Math.min(pattern.length - 1, f - PD)] ?? 0;
 }
+
+import { BASE_BILL, type BillPose } from '../characters/Bill';
+import { BASE_HUMAN as _BH } from '../characters/Human';
+import { FLOOR as _FLOOR } from '../environment/Factory';
+
+/** The Bill lounging on THE chair (end of Scene 1), at a given scale. */
+export function billSeated(scale: number, extra: Partial<BillPose> = {}): BillPose {
+  const LEG = seatedLeg(scale);
+  return {
+    ...BASE_BILL,
+    x: CHAIR_X,
+    y: billSeatY(scale),
+    scale,
+    aLa: 30, aRa: 30, aLl: 185, aRl: 185, aLb: 0.4, aRb: 0.4, hL: 'relax', hR: 'relax',
+    lLx: -40, lLy: LEG, lLk: -0.25, lRx: -170, lRy: LEG * 0.42, lRk: 0.7,
+    lean: -4, turn: 0.4, lookX: 0.6, smile: 0.7, asym: 0.9, browAng: 0.4,
+    ...extra,
+  };
+}
+
+/** Cast at the end of Scene 1, the starting point of Scene 2. */
+export const CAST_S1_END = {
+  owner: { ..._BH, x: POS.owner, y: _FLOOR, aLs: 40, aLe: -60, hL: 'open' as const, aRs: 38, aRe: -112, hR: 'fist' as const, turn: -0.6, lookX: -1, browAng: 0.4, sweat: 0.8, lean: -3 },
+  raju: { ..._BH, x: POS.raju, y: _FLOOR, crouch: 10, turn: -0.8, lookX: -1, sweat: 1, browAng: -0.8, aLs: 55, aLe: -95, aRs: 60, aRe: -100, hL: 'open' as const, hR: 'open' as const, lean: 8, tilt: 5 },
+  pappu: { ..._BH, x: POS.pappu, y: _FLOOR, facing: -1, turn: -0.9, lookX: -1, sweat: 1, browAng: -0.8 },
+};

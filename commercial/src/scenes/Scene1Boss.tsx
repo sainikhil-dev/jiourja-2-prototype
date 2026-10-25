@@ -392,7 +392,7 @@ export function scene1Music(B: Resolved): MusicCue[] {
   const { PD, BU, ST, END } = scene1Timing(B);
   return [
     { src: 'sfx/factory_ambience.wav', from: 0, to: PD + 8, vol: 0.55, fadeOut: 8, duck: 1 },
-    { src: 'music/villain_sting.wav', from: BU, to: BU + 120, vol: 0.55, duck: 0.5, fadeOut: 20 },
-    { src: 'music/villain_bed.wav', from: ST + 24, to: END, vol: 0.38, duck: 0.28, fadeIn: 14, loop: true },
+    { src: 'music/villain_sting.wav', from: BU, to: BU + 120, vol: 0.5, duck: 0.6, fadeOut: 20 },
+    { src: 'music/villain_bed.wav', from: ST + 24, to: END, vol: 0.38, duck: 0.55, fadeIn: 14, loop: true },
   ];
 }

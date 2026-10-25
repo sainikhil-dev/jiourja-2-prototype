@@ -10,9 +10,11 @@
     "build:preview": "vite build --config preview/vite.config.ts",
     "typecheck": "tsc --noEmit",
     "sfx": "node scripts/generate-placeholder-audio.mjs",
-    "render:preview": "remotion render src/index.ts Preview10s out/preview-10s.mp4",
     "still:sheet": "remotion still src/index.ts CharacterSheet out/character-sheet.png --frame=40",
-    "analyze-audio": "node scripts/analyze-audio.mjs"
+    "analyze-audio": "node scripts/analyze-audio.mjs",
+    "render": "remotion render src/index.ts Commercial out/commercial_raw.mp4 && bash scripts/master.sh out/commercial_raw.mp4 out/JioUrja2_Factory_Ka_Asli_Maalik_1080p.mp4",
+    "render:qa": "remotion render src/index.ts CommercialQA out/commercial_QA_540p.mp4 --scale=0.5",
+    "qa:sync": "remotion render src/index.ts DialogueStem out/dialogue.wav --codec=wav && tsx scripts/qa-sync.tsx out/dialogue.wav"
   },
   "dependencies": {
     "@remotion/cli": "^4.0.538",
@@ -29,6 +31,7 @@
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
     "echogarden": "^3.4.0",
+    "tsx": "^4.19.2",
     "typescript": "^5.6.3",
     "vite": "^5.4.11"
   }
